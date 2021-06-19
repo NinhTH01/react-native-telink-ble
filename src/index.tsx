@@ -2,7 +2,13 @@ import { NativeModules } from 'react-native';
 import { NATIVE_MODULE_NAME } from './config';
 
 interface TelinkBleType {
-  multiply(a: number, b: number): Promise<number>;
+  startScanning(): void;
+
+  stopScanning(): void;
+
+  initMeshNetwork(networkKey: string): Promise<string>;
+
+  createMeshNetwork(): Promise<string>;
 }
 
 const TelinkBle: TelinkBleType = NativeModules[NATIVE_MODULE_NAME];

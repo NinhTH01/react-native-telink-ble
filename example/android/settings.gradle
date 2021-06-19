@@ -2,5 +2,7 @@ rootProject.name = 'TelinkBleExample'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
-include ':reactnativetelinkble'
-project(':reactnativetelinkble').projectDir = new File(rootProject.projectDir, '../../android')
+include ':react-native-telink-ble'
+project(':react-native-telink-ble').projectDir = new File(rootProject.projectDir, '../../android')
+include ':TelinkBleMeshLib'
+project(':TelinkBleMeshLib').projectDir = new File(project(':react-native-telink-ble').projectDir, 'libs/TelinkBleMeshLib')

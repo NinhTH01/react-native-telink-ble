@@ -1,0 +1,3 @@
+[submodule "android/libs/TelinkBleMeshLib"]
+	path = android/libs/TelinkBleMeshLib
+	url = git@github.com:thanhtunguet/TelinkBleMeshLib.git

@@ -1,18 +1,37 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import TelinkBle from 'react-native-telink-ble';
+import { appStorage } from './app-storage';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const handleNetwork = React.useCallback(async () => {
+    let networkKey: string = appStorage.networkKey ?? '';
+    if (!networkKey) {
+      networkKey = await TelinkBle.createMeshNetwork();
+      await appStorage.setNetworkKey(networkKey);
+    }
+    await TelinkBle.initMeshNetwork(networkKey);
+  }, []);
 
   React.useEffect(() => {
-    TelinkBle.multiply(3, 7).then(setResult);
-  }, []);
+    handleNetwork();
+  }, [handleNetwork]);
+
+  function handleScan() {
+    setLoading(true);
+    TelinkBle.startScanning();
+  }
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      {!loading && (
+        <>
+          <Button onPress={handleScan}>Start scanning</Button>
+        </>
+      )}
     </View>
   );
 }
