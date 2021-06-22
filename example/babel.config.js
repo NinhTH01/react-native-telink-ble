@@ -8,9 +8,10 @@ module.exports = {
     [
       'module-resolver',
       {
-        extensions: ['.tsx', '.ts', '.js', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         alias: {
-          [pak.name]: path.join(__dirname, '..', pak.source),
+          [pak.name]: path.resolve(__dirname, '..', pak.source),
+          example: path.resolve(__dirname),
         },
       },
     ],
