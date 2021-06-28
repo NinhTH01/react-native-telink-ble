@@ -5,7 +5,7 @@ import DeviceScanningScreen from 'example/src/screens/DeviceScanningScreen';
 import debounce from 'lodash/debounce';
 import type { FC } from 'react';
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, ScrollView } from 'react-native';
 import { ColorPicker } from 'react-native-color-picker';
 import { Button, FAB } from 'react-native-paper';
 import TelinkBle, { NodeInfo } from 'react-native-telink-ble';
@@ -43,7 +43,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
   }, [navigation]);
 
   return (
-    <View style={styles.outerContainer}>
+    <ScrollView style={styles.outerContainer}>
       <FAB
         style={styles.fab}
         small
@@ -77,7 +77,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
         All off
       </Button>
       <Slider
-        style={{ width: 200, height: 40 }}
+        style={styles.slider}
         minimumValue={0}
         maximumValue={100}
         minimumTrackTintColor="#FFFFFF"
@@ -88,7 +88,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
         }}
       />
       <Slider
-        style={{ width: 200, height: 40 }}
+        style={styles.slider}
         minimumValue={0}
         maximumValue={100}
         minimumTrackTintColor="#FFFFFF"
@@ -99,7 +99,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
         }}
       />
 
-      <ColorPicker onColorChange={handleChangeColor} style={{ flex: 1 }} />
+      <ColorPicker onColorChange={handleChangeColor} style={styles.picker} />
 
       <FlatList
         data={nodes}
@@ -112,7 +112,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
           );
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -134,5 +134,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 0,
+  },
+  slider: { width: '100%', height: 40 },
+  picker: {
+    width: '100%',
+    aspectRatio: 1,
   },
 });
