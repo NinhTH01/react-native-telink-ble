@@ -5,7 +5,7 @@ import DeviceScanningScreen from 'example/src/screens/DeviceScanningScreen';
 import debounce from 'lodash/debounce';
 import type { FC } from 'react';
 import React from 'react';
-import { FlatList, StyleSheet, View, ScrollView } from 'react-native';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
 import { ColorPicker } from 'react-native-color-picker';
 import { Button, FAB } from 'react-native-paper';
 import TelinkBle, { NodeInfo } from 'react-native-telink-ble';
