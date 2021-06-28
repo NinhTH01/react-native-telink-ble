@@ -1,6 +1,6 @@
 import type { StackScreenProps } from '@react-navigation/stack';
 import React, { FC, Reducer } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import type { Device } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
@@ -20,6 +20,9 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
   >(deviceReducer, []);
 
   const handleStartScanning = React.useCallback(() => {
+    dispatch({
+      type: 'reset',
+    });
     setScanning(true);
     TelinkBle.startScanning();
   }, []);
@@ -51,24 +54,33 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
   }, []);
 
   return (
-    <>
-      {scanning && (
-        <View style={styles.indicatorContainer}>
-          <Button onPress={handleStopScanning}>Stop scanning</Button>
-          <ActivityIndicator />
-        </View>
-      )}
-      {!scanning && (
-        <View style={styles.indicatorContainer}>
-          <Button onPress={handleStartScanning}>Start scanning</Button>
-        </View>
-      )}
-      {devices.map((device: Device) => (
-        <React.Fragment key={device.address}>
-          <DeviceView device={device} />
-        </React.Fragment>
-      ))}
-    </>
+    <FlatList
+      contentContainerStyle={styles.listContent}
+      ListHeaderComponent={
+        <>
+          {scanning && (
+            <View style={styles.indicatorContainer}>
+              <Button onPress={handleStopScanning}>Stop scanning</Button>
+              <ActivityIndicator />
+            </View>
+          )}
+          {!scanning && (
+            <View style={styles.indicatorContainer}>
+              <Button onPress={handleStartScanning}>Start scanning</Button>
+            </View>
+          )}
+        </>
+      }
+      data={devices}
+      keyExtractor={(device: Device) => device.address}
+      renderItem={({ item, index }) => {
+        return (
+          <React.Fragment key={item.address}>
+            <DeviceView device={item} index={index} />
+          </React.Fragment>
+        );
+      }}
+    />
   );
 };
 
@@ -79,5 +91,9 @@ export default DeviceScanningScreen;
 const styles = StyleSheet.create({
   indicatorContainer: {
     flexDirection: 'row',
+  },
+  listContent: {
+    paddingTop: 8,
+    paddingBottom: 8,
   },
 });

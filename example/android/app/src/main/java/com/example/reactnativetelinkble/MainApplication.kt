@@ -1,17 +1,13 @@
 package com.example.reactnativetelinkble
 
-import android.app.Application
 import android.content.Context
-import android.os.Handler
-import android.os.HandlerThread
 import com.facebook.react.*
 import com.facebook.soloader.SoLoader
-import com.react.telink.ble.TelinkBleModule
+import com.react.telink.ble.BleApplication
 import com.react.telink.ble.TelinkBlePackage
-import com.telink.ble.mesh.foundation.EventBus
 import java.lang.reflect.InvocationTargetException
 
-class MainApplication : Application(), ReactApplication {
+class MainApplication : BleApplication(), ReactApplication {
   companion object {
     /**
      * Loads Flipper in React Native templates.
@@ -42,22 +38,6 @@ class MainApplication : Application(), ReactApplication {
     }
   }
 
-  private var mOfflineCheckHandler: Handler? = null
-
-  override fun onCreate() {
-    super.onCreate()
-    SoLoader.init(this,  /* native exopackage */false)
-    initializeFlipper(
-      this,
-      reactNativeHost.reactInstanceManager
-    ) // Remove this line if you don't want Flipper enabled
-
-    val offlineCheckThread = HandlerThread("offline check thread")
-    offlineCheckThread.start()
-    mOfflineCheckHandler = Handler(offlineCheckThread.looper)
-    TelinkBleModule.getInstance()?.setEventBus(EventBus())
-  }
-
   private val mReactNativeHost: ReactNativeHost = object : ReactNativeHost(this) {
     override fun getUseDeveloperSupport(): Boolean {
       return BuildConfig.DEBUG
@@ -76,5 +56,14 @@ class MainApplication : Application(), ReactApplication {
 
   override fun getReactNativeHost(): ReactNativeHost {
     return mReactNativeHost
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+    SoLoader.init(this,  /* native exopackage */false)
+    initializeFlipper(
+      this,
+      reactNativeHost.reactInstanceManager
+    ) // Remove this line if you don't want Flipper enabled
   }
 }

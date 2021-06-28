@@ -302,34 +302,28 @@ class MeshInfo : Serializable, Cloneable {
     const val FILE_NAME = "com.telink.ble.mesh.demo.STORAGE"
     fun createNewMesh(context: Context): MeshInfo {
       // 0x7FFF
-      val DEFAULT_LOCAL_ADDRESS = 0x0001
+      val defaultLocalAddress = 0x0001
       val meshInfo = MeshInfo()
 
-      // for test
-//        final byte[] NET_KEY = Arrays.hexToBytes("26E8D2DBD4363AF398FEDE049BAD0086");
-
-      // for test
-//        final byte[] APP_KEY = Arrays.hexToBytes("7759F48730A4F1B2259B1B0681BE7C01");
-
-//        final int IV_INDEX = 0x20345678;
-
-//        meshInfo.networkKey = NET_KEY;
       meshInfo.networkKey = MeshUtils.generateRandom(16)
       meshInfo.netKeyIndex = 0x00
       meshInfo.appKeyList = ArrayList<AppKey>() as MutableList<AppKey>
-      //        meshInfo.appKeyList.add(new MeshInfo.AppKey(0x00, APP_KEY));
-//        byte[] appKey = Arrays.hexToBytes("522514A01CE1BAC821986BDD46D037C0");
       meshInfo.appKeyList!!.add(AppKey(0x00, MeshUtils.generateRandom(16)))
-      //        meshInfo.appKeyList.add(new AppKey(0x00, appKey));
       meshInfo.ivIndex = 0
       meshInfo.sequenceNumber = 0
       meshInfo.nodes = ArrayList<NodeInfo>()
-      meshInfo.localAddress = DEFAULT_LOCAL_ADDRESS
-      meshInfo.provisionIndex = DEFAULT_LOCAL_ADDRESS + 1 // 0x0002
+      meshInfo.localAddress = defaultLocalAddress
+      meshInfo.provisionIndex = defaultLocalAddress + 1 // 0x0002
 
-//        meshInfo.provisionerUUID = SharedPreferenceHelper.getLocalUUID(context);
       meshInfo.provisionerUUID = Arrays.bytesToHexString(MeshUtils.generateRandom(16))
       return meshInfo
     }
+  }
+
+  @JvmName("getDefaultAppKeyIndex1")
+  fun getDefaultAppKeyIndex(): Int {
+    return if (appKeyList!!.size == 0) {
+      0
+    } else appKeyList!![0].index
   }
 }

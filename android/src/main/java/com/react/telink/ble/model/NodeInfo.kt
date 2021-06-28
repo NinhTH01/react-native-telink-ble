@@ -349,4 +349,9 @@ class NodeInfo : Serializable {
     const val ON_OFF_STATE_OFF = 0
     const val ON_OFF_STATE_OFFLINE = -1
   }
+
+  /**
+   * default bind support
+   */
+  private var defaultBind = false
 }

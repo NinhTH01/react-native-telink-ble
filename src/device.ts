@@ -26,6 +26,13 @@ export interface Device {
   scanRecord: string;
 
   /**
+   * Device type (3 bytes)
+   *
+   * @type {string} - Hex string
+   */
+  deviceType: string;
+
+  /**
    * Received Signal Strength Indication
    *
    * @type {number}

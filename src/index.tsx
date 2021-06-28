@@ -1,8 +1,12 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
-import { NATIVE_MODULE_NAME } from './config';
 import { BleEvent } from './ble-event';
+import type { BluetoothState } from './bluetooth-state';
+import type { BoundDevice } from './bound-device';
+import { NATIVE_MODULE_NAME } from './config';
 import type { Device } from './device';
+import type { NodeInfo } from './node-info';
 import type { TelinkBleNativeModule } from './telink-ble-native-module';
+import type { HSL } from 'colorsys';
 
 const TelinkBleModule: TelinkBleNativeModule =
   NativeModules[NATIVE_MODULE_NAME];
@@ -14,6 +18,18 @@ class TelinkBle implements TelinkBleNativeModule {
     this.eventEmitter = new NativeEventEmitter();
   }
 
+  public setOnOff(address: number, onOff: number): void {
+    TelinkBleModule.setOnOff(address, onOff);
+  }
+
+  public setAllOn(): void {
+    TelinkBleModule.setAllOn();
+  }
+
+  public setAllOff(): void {
+    TelinkBleModule.setAllOff();
+  }
+
   public startScanning() {
     return TelinkBleModule.startScanning();
   }
@@ -22,12 +38,36 @@ class TelinkBle implements TelinkBleNativeModule {
     return TelinkBleModule.stopScanning();
   }
 
-  public createMeshNetwork(): Promise<string> {
-    return TelinkBleModule.createMeshNetwork();
+  public initMeshService() {
+    TelinkBleModule.initMeshService();
   }
 
-  public initMeshNetwork(networkKey: string): Promise<string> {
-    return TelinkBleModule.initMeshNetwork(networkKey);
+  public checkBluetoothPermission(): Promise<BluetoothState> {
+    return TelinkBleModule.checkBluetoothPermission();
+  }
+
+  public startProvisioning(deviceUUID: string): Promise<number> {
+    return TelinkBleModule.startProvisioning(deviceUUID);
+  }
+
+  public getNodes(): Promise<NodeInfo[]> {
+    return TelinkBleModule.getNodes();
+  }
+
+  public autoConnect() {
+    TelinkBleModule.autoConnect();
+  }
+
+  public setLuminance(address: number, luminance: number): void {
+    TelinkBleModule.setLuminance(address, luminance);
+  }
+
+  public setTemp(address: number, temp: number): void {
+    TelinkBleModule.setTemp(address, temp);
+  }
+
+  public setHsl(address: number, hsl: HSL): void {
+    TelinkBleModule.setHsl(address, hsl);
   }
 
   /**
@@ -66,12 +106,21 @@ class TelinkBle implements TelinkBleNativeModule {
    * @param listener {() => void | Promise<void>} - scanning timeout handler function
    * @return {() => void} - function to unsubscribe
    */
-  public addScanningTimeoutListener(listener: () => void | Promise<void>) {
+  public addScanningTimeoutListener(
+    listener: () => void | Promise<void>
+  ): () => void {
     return this.addEventListener(BleEvent.EVENT_SCANNING_TIMEOUT, listener);
+  }
+
+  public addBindingSuccessListener(
+    listener: (device: BoundDevice) => void | Promise<void>
+  ) {
+    return this.addEventListener(BleEvent.EVENT_BINDING_SUCCESS, listener);
   }
 }
 
 export default new TelinkBle();
+export { BondState } from './bond-state';
+export { NodeInfo } from './node-info';
 export type { Device };
 export { BleEvent };
-export { BondState } from './bond-state';

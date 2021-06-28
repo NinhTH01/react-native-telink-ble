@@ -1,30 +1,35 @@
 import React from 'react';
 import {
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
 } from 'react-native';
-import type { Device } from 'react-native-telink-ble';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import type { NodeInfo } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import type { BoundDevice } from 'src/bound-device';
 
-interface DeviceViewProps extends TouchableOpacityProps {
-  device: Device;
+interface NodeViewProps extends TouchableOpacityProps {
+  node: NodeInfo;
 
   index: number;
 }
 
-export default function DeviceView(props: DeviceViewProps) {
-  const { device, ...restProps } = props;
+export default function NodeView(props: NodeViewProps) {
+  const { node, ...restProps } = props;
 
-  const handleProvision = React.useCallback(() => {
-    TelinkBle.startProvisioning(device.uuid).then((unicastId: number) => {
-      console.log(unicastId);
-    });
-  }, [device.uuid]);
+  const [onOff, setOnOff] = React.useState<boolean>(false);
+
+  const handleOnOff = React.useCallback(
+    (newOnOff: boolean) => {
+      TelinkBle.setOnOff(node.unicastId, newOnOff ? 1 : 0);
+      setOnOff(newOnOff);
+    },
+    [node.unicastId]
+  );
 
   React.useEffect(() => {
     return TelinkBle.addBindingSuccessListener((device: BoundDevice) => {
@@ -33,28 +38,25 @@ export default function DeviceView(props: DeviceViewProps) {
   }, []);
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      {...restProps}
-      onPress={handleProvision}
-    >
+    <TouchableOpacity style={styles.container} {...restProps}>
       <View style={styles.head}>
         <MaterialIcons name="laptop" size={20} style={styles.icon} />
         <Text>MAC</Text>
       </View>
-      <Text>{device.address}</Text>
+      <Text>{node.address}</Text>
 
       <View style={styles.deviceInfo}>
         <MaterialIcons name="tag" size={20} style={styles.icon} />
         <Text>UUID</Text>
       </View>
-      <Text>{device.uuid}</Text>
+      <Text>{node.uuid}</Text>
 
       <View style={styles.deviceInfo}>
         <MaterialIcons name="tag" size={20} style={styles.icon} />
-        <Text>DeviceType</Text>
+        <Text>Unicast ID</Text>
       </View>
-      <Text>{device.scanRecord.split(':').slice(49, 52).join(':')}</Text>
+      <Text>{node.unicastId}</Text>
+      <Switch value={onOff} onValueChange={handleOnOff} />
     </TouchableOpacity>
   );
 }

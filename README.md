@@ -17,6 +17,7 @@ yarn add react-native-telink-ble
 ### Android
 
 #### Add permissions to AndroidManifest.xml
+
 ```xml
 <manifest>
 
@@ -31,46 +32,49 @@ yarn add react-native-telink-ble
 
 </manifest>
 ```
+
 #### Enable Kotlin support for your project (Using Android Studio)
+
 #### Convert your MainApplication and MainActivity to Kotlin (Using Android Studio)
-#### In MainApplication:
+
+#### Make MainApplication inherits BleApplication:
 
 ```kotlin
 package com.example.reactnativetelinkble
 
-import android.app.Application
+// import android.app.Application
 import android.content.Context
 import com.facebook.react.*
 import com.facebook.soloader.SoLoader
 import java.lang.reflect.InvocationTargetException
 // Add this ->
-import android.os.Handler
-import android.os.HandlerThread
-import com.reactnativetelinkble.TelinkBleModule
-import com.reactnativetelinkble.TelinkBlePackage
-import com.telink.ble.mesh.foundation.EventBus
+import com.react.telink.ble.BleApplication
+import com.react.telink.ble.TelinkBlePackage
 // <- Add this
 
-class MainApplication : Application(), ReactApplication {
-  private var mOfflineCheckHandler: Handler? = null // <- Add this
-
-  override fun onCreate() {
-    super.onCreate()
-    SoLoader.init(this,  /* native exopackage */false)
-    initializeFlipper(
-      this,
-      reactNativeHost.reactInstanceManager
-    ) // Remove this line if you don't want Flipper enabled
-
-    // Add this ->
-    val offlineCheckThread = HandlerThread("offline check thread")
-    offlineCheckThread.start()
-    mOfflineCheckHandler = Handler(offlineCheckThread.looper)
-    TelinkBleModule.setEventBus(EventBus())
-  }
-  // <- Add this
+// class MainApplication : Application(), ReactApplication {
+class MainApplication : BleApplication(), ReactApplication {
+  // MainApplication inherits BleApplication instead of android.app.Application
   // ...
 }
+```
+
+#### Make MainActivity inherits BleActivity:
+
+```kotlin
+// import android.app.Activity
+import com.react.telink.ble.BleActivity
+
+class MainActivity : BleActivity() {
+  /**
+   * Returns the name of the main component registered from JavaScript.
+   * This is used to schedule rendering of the component.
+   */
+  override fun getMainComponentName(): String {
+    return "TelinkBleExample"
+  }
+}
+
 ```
 
 #### In android/settings.gradle
@@ -92,7 +96,7 @@ dependencies {
 }
 ```
 
-#### Reload your project
+#### Reload project
 
 ## Usage
 

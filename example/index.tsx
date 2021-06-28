@@ -1,16 +1,16 @@
-import 'react-native-gesture-handler';
-import { enableScreens } from 'react-native-screens';
-import { AppRegistry } from 'react-native';
-import { name as appName } from './app.json';
-import type { FC, LazyExoticComponent } from 'react';
-import React, { Suspense } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { appStorage } from 'example/src/app/app-storage';
 import { globalState } from 'example/src/app/global-state';
-import TelinkBle from 'react-native-telink-ble';
-import { showError, showInfo } from 'example/src/helpers/toast';
+import type { FC, LazyExoticComponent } from 'react';
+import React, { Suspense } from 'react';
+import { AppRegistry, Platform } from 'react-native';
+import 'react-native-gesture-handler';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { PERMISSIONS, request } from 'react-native-permissions';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { enableScreens } from 'react-native-screens';
+import { name as appName } from './app.json';
+import { showError } from './src/helpers/toast';
 
 enableScreens();
 
@@ -22,17 +22,21 @@ const App: LazyExoticComponent<FC> = React.lazy(async () => {
     require('reactn-devtools').default();
   }
 
-  try {
-    let networkKey: string = appStorage.networkKey ?? '';
-    if (!networkKey) {
-      networkKey = await TelinkBle.createMeshNetwork();
-      await appStorage.setNetworkKey(networkKey);
-    }
-    await TelinkBle.initMeshNetwork(networkKey);
-    showInfo('Mesh network initialized');
-  } catch (error) {
-    showError('Can not initialize mesh network');
-  }
+  await request(
+    Platform.select({
+      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    })!
+  )
+    .then((status) => {
+      if (status === 'granted') {
+        return;
+      }
+      showError('Please enable location permission to find bluetooth devices');
+    })
+    .catch((error: Error) => {
+      console.log(error);
+    });
 
   return import('example/src/navigators/RootNavigator');
 });
