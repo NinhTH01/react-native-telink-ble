@@ -40,7 +40,7 @@
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "metro-react-native-babel-preset": "^0.64.0",
-    "node-sass": "^6.0.0",
+    "node-sass": "^5",
     "postcss": "^8.3.5",
     "react-native-postcss-transformer": "^1.2.4",
     "react-native-sass-transformer": "^1.4.0",
