@@ -18,7 +18,7 @@ class TelinkBle implements TelinkBleNativeModule {
     this.eventEmitter = new NativeEventEmitter();
   }
 
-  public setOnOff(address: number, onOff: number): void {
+  public setOnOff(address: number, onOff: 0 | 1): void {
     TelinkBleModule.setOnOff(address, onOff);
   }
 

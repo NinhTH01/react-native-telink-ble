@@ -12,6 +12,7 @@ import com.telink.ble.mesh.core.message.MeshSigModel
 import com.telink.ble.mesh.core.message.config.ConfigStatus
 import com.telink.ble.mesh.core.message.config.ModelPublicationSetMessage
 import com.telink.ble.mesh.core.message.config.ModelPublicationStatusMessage
+import com.telink.ble.mesh.core.message.config.NodeResetMessage
 import com.telink.ble.mesh.core.message.generic.OnOffSetMessage
 import com.telink.ble.mesh.core.message.lighting.CtlTemperatureSetMessage
 import com.telink.ble.mesh.core.message.lighting.HslSetMessage
@@ -148,10 +149,32 @@ class TelinkBleModule :
   }
 
   @ReactMethod
-  fun setSceneForController(deviceId: Int, mode: Int, sceneId: Int) {}
+  fun setSceneForController(deviceId: Int, mode: Int, sceneId: Int) {
+  }
 
   @ReactMethod
-  fun kickOut(deviceId: Int) {}
+  fun kickOut(deviceId: Int) {
+    // send reset message
+    val cmdSent =
+      MeshService.getInstance().sendMeshMessage(NodeResetMessage(deviceId))
+    val kickDirect = deviceId == MeshService.getInstance().directConnectedNodeAddress
+    if (!cmdSent || !kickDirect) {
+      mHandler!!.postDelayed(
+        {
+          onKickOutFinish(deviceId)
+        },
+        3 * 1000L
+      )
+    }
+  }
+
+  private fun onKickOutFinish(deviceId: Int) {
+    mHandler!!.removeCallbacksAndMessages(null)
+    MeshService.getInstance().removeDevice(deviceId)
+    application!!.getMeshInfo().removeDeviceByMeshAddress(deviceId)
+    application!!.getMeshInfo().saveOrUpdate(context)
+    eventEmitter.emit(EVENT_RESET_NODE_SUCCESS, deviceId)
+  }
 
   @ReactMethod
   fun setLuminance(address: Int, lum: Int) {
