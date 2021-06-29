@@ -19,7 +19,7 @@ import com.telink.ble.mesh.foundation.event.MeshEvent
 import com.telink.ble.mesh.foundation.parameter.AutoConnectParameters
 import com.telink.ble.mesh.util.MeshLogger
 
-open class BleActivity : ReactActivity(), EventListener<String?> {
+open class BleActivity : ReactActivity(), EventListener<String?>, MeshAutoConnect {
   private val mHandler = Handler()
 
   private val tag = javaClass.simpleName
@@ -54,6 +54,10 @@ open class BleActivity : ReactActivity(), EventListener<String?> {
 
   override fun onResume() {
     super.onResume()
+    autoConnect()
+  }
+
+  override fun autoConnect() {
     MeshService.getInstance().autoConnect(AutoConnectParameters())
   }
 

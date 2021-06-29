@@ -1,14 +1,14 @@
-import type { Device } from 'react-native-telink-ble';
+import type { Device, NodeInfo } from 'react-native-telink-ble';
 
-export interface DeviceReducerAction {
+export interface DeviceReducerAction<T extends Device | NodeInfo> {
   type: 'reset' | 'add';
-  device?: Device;
+  device?: T;
 }
 
-export function deviceReducer(
-  state: Device[],
-  action: DeviceReducerAction
-): Device[] {
+export function deviceReducer<T extends Device | NodeInfo>(
+  state: T[],
+  action: DeviceReducerAction<T>
+): T[] {
   switch (action.type) {
     case 'add':
       if (state.find((d) => d.address === action.device?.address)) {

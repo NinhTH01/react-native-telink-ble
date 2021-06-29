@@ -60,7 +60,7 @@ class MainApplication : BleApplication(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-    SoLoader.init(this,  /* native exopackage */false)
+    SoLoader.init(this,  /* native exo-package */false)
     initializeFlipper(
       this,
       reactNativeHost.reactInstanceManager

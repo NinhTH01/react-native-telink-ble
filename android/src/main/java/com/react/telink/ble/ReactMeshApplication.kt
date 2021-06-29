@@ -11,22 +11,34 @@ import com.telink.ble.mesh.foundation.event.OnlineStatusEvent
 import com.telink.ble.mesh.foundation.event.StatusNotificationEvent
 
 interface ReactMeshApplication : EventHandler {
+  /**
+   * Application event bus
+   */
   abstract var mEventBus: EventBus<String?>?
 
+  /**
+   * Get mesh info from outside of this class
+   */
   fun getMeshInfo(): MeshInfo
 
   /**
    * sequence-number or iv-index info update
+   *
+   * @param networkInfoUpdateEvent
    */
   fun onNetworkInfoUpdate(networkInfoUpdateEvent: NetworkInfoUpdateEvent)
 
   /**
    * device status notification
+   *
+   * @param statusNotificationEvent
    */
   fun onStatusNotificationEvent(statusNotificationEvent: StatusNotificationEvent?)
 
   /**
    * online status notification
+   *
+   * @param onlineStatusEvent
    */
   fun onOnlineStatusEvent(onlineStatusEvent: OnlineStatusEvent?)
 
@@ -51,6 +63,8 @@ interface ReactMeshApplication : EventHandler {
 
   /**
    * remove listener
+   *
+   * @param listener Event listener
    */
   fun removeEventListener(listener: EventListener<String?>?)
 
@@ -69,6 +83,8 @@ interface ReactMeshApplication : EventHandler {
 
   /**
    * dispatch event from application
+   *
+   * @param event Event object
    */
   fun dispatchEvent(event: Event<String?>?)
 }

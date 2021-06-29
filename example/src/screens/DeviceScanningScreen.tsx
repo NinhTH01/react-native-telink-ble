@@ -1,6 +1,6 @@
 import type { StackScreenProps } from '@react-navigation/stack';
 import React, { FC, Reducer } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import type { Device } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
@@ -16,7 +16,7 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
   const [scanning, setScanning] = React.useState<boolean>(false);
 
   const [devices, dispatch] = React.useReducer<
-    Reducer<Device[], DeviceReducerAction>
+    Reducer<Device[], DeviceReducerAction<Device>>
   >(deviceReducer, []);
 
   const handleStartScanning = React.useCallback(() => {
@@ -73,7 +73,7 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
       }
       data={devices}
       keyExtractor={(device: Device) => device.address}
-      renderItem={({ item, index }) => {
+      renderItem={({ item, index }: ListRenderItemInfo<Device>) => {
         return (
           <React.Fragment key={item.address}>
             <DeviceView device={item} index={index} />

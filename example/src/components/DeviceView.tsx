@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 import type { Device } from 'react-native-telink-ble';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TelinkBle from 'react-native-telink-ble';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import type { BoundDevice } from 'src/bound-device';
 
 interface DeviceViewProps extends TouchableOpacityProps {
@@ -27,8 +27,8 @@ export default function DeviceView(props: DeviceViewProps) {
   }, [device.uuid]);
 
   React.useEffect(() => {
-    return TelinkBle.addBindingSuccessListener((device: BoundDevice) => {
-      console.log(device);
+    return TelinkBle.addBindingSuccessListener((d: BoundDevice) => {
+      console.log(d);
     });
   }, []);
 

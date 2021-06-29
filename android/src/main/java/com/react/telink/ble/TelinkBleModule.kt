@@ -32,7 +32,11 @@ import com.telink.ble.mesh.util.Arrays
 import com.telink.ble.mesh.util.MeshLogger
 
 class TelinkBleModule :
-  ReactContextBaseJavaModule, EventListener<String?> {
+  ReactContextBaseJavaModule, EventListener<String?>, MeshAutoConnect {
+  override fun getName(): String {
+    return "TelinkBle"
+  }
+
   private var context: ReactApplicationContext? = null
 
   private var isPubSetting = false
@@ -65,10 +69,6 @@ class TelinkBleModule :
     application?.addEventListener(ScanEvent.EVENT_TYPE_SCAN_TIMEOUT, this)
     application?.addEventListener(ScanEvent.EVENT_TYPE_DEVICE_FOUND, this)
     application?.addEventListener(ModelPublicationStatusMessage::class.java.name, this)
-  }
-
-  override fun getName(): String {
-    return "TelinkBle"
   }
 
   companion object {
@@ -130,6 +130,28 @@ class TelinkBleModule :
     )
     MeshService.getInstance().sendMeshMessage(onOffSetMessage)
   }
+
+  @ReactMethod
+  fun addDeviceToGroup(groupId: Int, deviceId: Int) {
+  }
+
+  @ReactMethod
+  fun removeDeviceFromGroup(groupId: Int, deviceId: Int) {
+  }
+
+  @ReactMethod
+  fun setSceneForDevice(sceneId: Int, deviceId: Int) {
+  }
+
+  @ReactMethod
+  fun removeSceneFromDevice(sceneId: Int, deviceId: Int) {
+  }
+
+  @ReactMethod
+  fun setSceneForController(deviceId: Int, mode: Int, sceneId: Int) {}
+
+  @ReactMethod
+  fun kickOut(deviceId: Int) {}
 
   @ReactMethod
   fun setLuminance(address: Int, lum: Int) {
@@ -546,8 +568,7 @@ class TelinkBleModule :
   }
 
   @ReactMethod
-  fun autoConnect() {
+  override fun autoConnect() {
     MeshService.getInstance().autoConnect(AutoConnectParameters())
   }
 }
-

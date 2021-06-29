@@ -10,7 +10,6 @@ import {
 import type { NodeInfo } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import type { BoundDevice } from 'src/bound-device';
 
 interface NodeViewProps extends TouchableOpacityProps {
   node: NodeInfo;
@@ -30,12 +29,6 @@ export default function NodeView(props: NodeViewProps) {
     },
     [node.unicastId]
   );
-
-  React.useEffect(() => {
-    return TelinkBle.addBindingSuccessListener((device: BoundDevice) => {
-      console.log(device);
-    });
-  }, []);
 
   return (
     <TouchableOpacity style={styles.container} {...restProps}>

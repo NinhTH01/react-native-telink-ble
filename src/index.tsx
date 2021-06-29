@@ -70,6 +70,34 @@ class TelinkBle implements TelinkBleNativeModule {
     TelinkBleModule.setHsl(address, hsl);
   }
 
+  public addDeviceToGroup(groupId: number, deviceId: number): void {
+    TelinkBleModule.addDeviceToGroup(groupId, deviceId);
+  }
+
+  public removeDeviceFromGroup(groupId: number, deviceId: number): void {
+    TelinkBleModule.removeDeviceFromGroup(groupId, deviceId);
+  }
+
+  public setSceneForDevice(sceneId: number, deviceId: number): void {
+    TelinkBleModule.setSceneForDevice(sceneId, deviceId);
+  }
+
+  public removeSceneFromDevice(sceneId: number, deviceId: number): void {
+    TelinkBleModule.removeSceneFromDevice(sceneId, deviceId);
+  }
+
+  public setSceneForController(
+    deviceId: number,
+    mode: number,
+    sceneId: number
+  ): void {
+    TelinkBleModule.setSceneForController(deviceId, mode, sceneId);
+  }
+
+  public kickOut(deviceId: number): void {
+    TelinkBleModule.kickOut(deviceId);
+  }
+
   /**
    * Add BLE event listener
    * @param event {BleEvent} - BLE event

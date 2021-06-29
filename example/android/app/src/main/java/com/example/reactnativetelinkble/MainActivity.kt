@@ -1,7 +1,6 @@
 package com.example.reactnativetelinkble
 
 import com.react.telink.ble.BleActivity
-import android.app.Activity
 
 class MainActivity : BleActivity() {
   /**
