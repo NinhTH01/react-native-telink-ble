@@ -74,10 +74,11 @@ class MainActivity : BleActivity() {
 #### In android/settings.gradle
 
 ```gradle
-include ':react-native-telink-ble'
-project(':react-native-telink-ble').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-telink-ble/android')
 include ':TelinkBleMeshLib'
 project(':TelinkBleMeshLib').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-telink-ble/android/libs/TelinkBleMeshLib')
+
+include ':react-native-telink-ble'
+project(':react-native-telink-ble').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-telink-ble/android')
 ```
 
 #### In android/app/build.gradle
@@ -85,8 +86,8 @@ project(':TelinkBleMeshLib').projectDir = new File(rootProject.projectDir, '../n
 ```gradle
 dependencies {
   // ...
-  implementation project(':react-native-telink-ble')
   implementation project(':TelinkBleMeshLib')
+  implementation project(':react-native-telink-ble')
 }
 ```
 
