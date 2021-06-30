@@ -62,17 +62,11 @@ class MainApplication : BleApplication(), ReactApplication {
 #### Make MainActivity inherits BleActivity:
 
 ```kotlin
-// import android.app.Activity
+// import com.facebook.react.*
 import com.react.telink.ble.BleActivity
 
 class MainActivity : BleActivity() {
-  /**
-   * Returns the name of the main component registered from JavaScript.
-   * This is used to schedule rendering of the component.
-   */
-  override fun getMainComponentName(): String {
-    return "TelinkBleExample"
-  }
+  // ...
 }
 
 ```
@@ -81,9 +75,9 @@ class MainActivity : BleActivity() {
 
 ```gradle
 include ':react-native-telink-ble'
-project(':react-native-telink-ble').projectDir = new File(rootProject.projectDir, '../../android')
+project(':react-native-telink-ble').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-telink-ble/android')
 include ':TelinkBleMeshLib'
-project(':TelinkBleMeshLib').projectDir = new File(project(':react-native-telink-ble').projectDir, 'libs/TelinkBleMeshLib')
+project(':TelinkBleMeshLib').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-telink-ble/android/libs/TelinkBleMeshLib')
 ```
 
 #### In android/app/build.gradle
