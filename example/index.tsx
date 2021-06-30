@@ -38,7 +38,7 @@ const App: LazyExoticComponent<FC> = React.lazy(async () => {
       console.log(error);
     });
 
-  return import('example/src/navigators/RootNavigator');
+  return import('./src/navigators/RootNavigator');
 });
 
 function AppEntry() {
