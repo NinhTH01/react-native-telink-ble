@@ -2,13 +2,13 @@ import {
   createStackNavigator,
   StackHeaderProps,
 } from '@react-navigation/stack';
-import CustomNavigationBar from 'example/src/components/CustomNavigationBar';
-import DeviceScanningScreen from 'example/src/screens/DeviceScanningScreen';
-import HomeScreen from 'example/src/screens/HomeScreen';
 import type { FC } from 'react';
 import React from 'react';
 import nameof from 'ts-nameof.macro';
+import CustomNavigationBar from '../components/CustomNavigationBar';
 import { DeviceControlScreen } from '../screens/DeviceControlScreen';
+import DeviceScanningScreen from '../screens/DeviceScanningScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 

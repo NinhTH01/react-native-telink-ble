@@ -1,5 +1,5 @@
 import React from 'reactn';
-import { appStorage } from 'example/src/app/app-storage';
+import { appStorage } from './app-storage';
 
 export class GlobalState {
   public get networkKey(): string | null | undefined {

@@ -11,7 +11,6 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         alias: {
           [pak.name]: path.resolve(__dirname, '..', pak.source),
-          example: path.resolve(__dirname),
         },
       },
     ],

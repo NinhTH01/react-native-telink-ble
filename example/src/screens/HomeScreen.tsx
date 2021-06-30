@@ -1,5 +1,5 @@
 import type { StackScreenProps } from '@react-navigation/stack';
-import DeviceScanningScreen from 'example/src/screens/DeviceScanningScreen';
+import DeviceScanningScreen from './DeviceScanningScreen';
 import type { FC } from 'react';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
