@@ -79,6 +79,15 @@ jobs:
           name: Build package
           command: |
             yarn prepare
+  build-example:
+    executor: default
+    steps:
+      - attach_project
+      - run:
+        name: Build example
+        command: |
+          yarn example react-native bundle --platform ios --minify true --dev false --entry-file index.tsx --bundle-output ios/mainjs.bundle --assets-dest ios/assets
+          yarn example react-native bundle --platform android --minify true --dev false --entry-file index.tsx --bundle-output android/index.android.bundle --assets-dest android/assets
 
 workflows:
   build-and-test:
