@@ -165,6 +165,12 @@ export class TelinkBle implements TelinkBleNativeModule {
   ) {
     return this.addEventListener(BleEvent.EVENT_BINDING_SUCCESS, listener);
   }
+
+  public addBindingFailListener(
+    listener: (device: BoundDevice) => void | Promise<void>
+  ) {
+    return this.addEventListener(BleEvent.EVENT_BINDING_FAILED, listener);
+  }
 }
 
 export default new TelinkBle();
