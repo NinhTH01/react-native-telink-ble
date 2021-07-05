@@ -120,8 +120,6 @@
 		2528951B2468F13400E590F9 /* SigUpperTransportPdu.m in Sources */ = {isa = PBXBuildFile; fileRef = 25D88C192361459100D4F0F7 /* SigUpperTransportPdu.m */; };
 		2528951C2468F13400E590F9 /* SigProvisioningManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 25335F61235EF339006C79C1 /* SigProvisioningManager.m */; };
 		2528951D2468F13400E590F9 /* SigProvisioningData.m in Sources */ = {isa = PBXBuildFile; fileRef = 25335F62235EF339006C79C1 /* SigProvisioningData.m */; };
-		252895322468F6F300E590F9 /* SigRemoteAddManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2528952D2468F6F200E590F9 /* SigRemoteAddManager.m */; };
-		252895352468F6F300E590F9 /* MeshOTAManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 252895312468F6F200E590F9 /* MeshOTAManager.m */; };
 		252ABF62236057A70096563F /* SigMeshMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 252ABF5E236057A60096563F /* SigMeshMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		252ABF63236057A70096563F /* SigMeshMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 252ABF5F236057A60096563F /* SigMeshMessage.m */; };
 		252ABF64236057A70096563F /* SigConfigMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 252ABF60236057A60096563F /* SigConfigMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -161,8 +159,6 @@
 		25335F77235EF339006C79C1 /* SigAddDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 25335F6B235EF339006C79C1 /* SigAddDeviceManager.m */; };
 		25335F90235F06D3006C79C1 /* SDKLibCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 25335F8E235F06D3006C79C1 /* SDKLibCommand.m */; };
 		25335F91235F06D3006C79C1 /* SDKLibCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 25335F8F235F06D3006C79C1 /* SDKLibCommand.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		254072A925C8E48200D0FF8B /* SDKLibCommand+subnetBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 254072A725C8E48200D0FF8B /* SDKLibCommand+subnetBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		254072AA25C8E48200D0FF8B /* SDKLibCommand+subnetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 254072A825C8E48200D0FF8B /* SDKLibCommand+subnetBridge.m */; };
 		255394F924907A9B0095B499 /* pem2.h in Headers */ = {isa = PBXBuildFile; fileRef = 255394A324907A9B0095B499 /* pem2.h */; };
 		255394FA24907A9B0095B499 /* pem2.h in Headers */ = {isa = PBXBuildFile; fileRef = 255394A324907A9B0095B499 /* pem2.h */; };
 		255394FB24907A9B0095B499 /* pem.h in Headers */ = {isa = PBXBuildFile; fileRef = 255394A424907A9B0095B499 /* pem.h */; };
@@ -417,9 +413,6 @@
 		25151BF82362F2AC00967668 /* SigMessageHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigMessageHandle.h; sourceTree = "<group>"; };
 		25151BF92362F2AC00967668 /* SigMessageHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SigMessageHandle.m; sourceTree = "<group>"; };
 		252895292468F13400E590F9 /* TelinkSigMeshLibExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TelinkSigMeshLibExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2528952A2468F13400E590F9 /* TelinkSigMeshLib copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TelinkSigMeshLib copy-Info.plist"; path = "/Users/liangjiazhi/Downloads/源码/私有仓库/TelinkSigMeshLib/TelinkSigMeshLib/TelinkSigMeshLib copy-Info.plist"; sourceTree = "<absolute>"; };
-		2528952D2468F6F200E590F9 /* SigRemoteAddManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigRemoteAddManager.m; sourceTree = "<group>"; };
-		252895312468F6F200E590F9 /* MeshOTAManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeshOTAManager.m; sourceTree = "<group>"; };
 		252ABF5E236057A60096563F /* SigMeshMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigMeshMessage.h; sourceTree = "<group>"; };
 		252ABF5F236057A60096563F /* SigMeshMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigMeshMessage.m; sourceTree = "<group>"; };
 		252ABF60236057A60096563F /* SigConfigMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigConfigMessage.h; sourceTree = "<group>"; };
@@ -459,8 +452,6 @@
 		25335F6B235EF339006C79C1 /* SigAddDeviceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigAddDeviceManager.m; sourceTree = "<group>"; };
 		25335F8E235F06D3006C79C1 /* SDKLibCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDKLibCommand.m; sourceTree = "<group>"; };
 		25335F8F235F06D3006C79C1 /* SDKLibCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDKLibCommand.h; sourceTree = "<group>"; };
-		254072A725C8E48200D0FF8B /* SDKLibCommand+subnetBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SDKLibCommand+subnetBridge.h"; sourceTree = "<group>"; };
-		254072A825C8E48200D0FF8B /* SDKLibCommand+subnetBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SDKLibCommand+subnetBridge.m"; sourceTree = "<group>"; };
 		255394A324907A9B0095B499 /* pem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem2.h; sourceTree = "<group>"; };
 		255394A424907A9B0095B499 /* pem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem.h; sourceTree = "<group>"; };
 		255394A524907A9B0095B499 /* ssl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl3.h; sourceTree = "<group>"; };
@@ -645,142 +636,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2528952B2468F6F200E590F9 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				254072A625C8E37100D0FF8B /* subnet bridge */,
-				2528952C2468F6F200E590F9 /* remote provision */,
-				2528952F2468F6F200E590F9 /* MeshOTA */,
-			);
-			name = Extensions;
-			path = ../../Extensions;
-			sourceTree = "<group>";
-		};
-		2528952C2468F6F200E590F9 /* remote provision */ = {
-			isa = PBXGroup;
-			children = (
-				2528952D2468F6F200E590F9 /* SigRemoteAddManager.m */,
-			);
-			path = "remote provision";
-			sourceTree = "<group>";
-		};
-		2528952F2468F6F200E590F9 /* MeshOTA */ = {
-			isa = PBXGroup;
-			children = (
-				252895312468F6F200E590F9 /* MeshOTAManager.m */,
-			);
-			path = MeshOTA;
-			sourceTree = "<group>";
-		};
-		25335CB3235ED9EE006C79C1 /* Layers */ = {
-			isa = PBXGroup;
-			children = (
-				25D88BCA2361392100D4F0F7 /* SigKeySet.h */,
-				25D88BC92361392100D4F0F7 /* SigKeySet.m */,
-				25D88BCB2361392100D4F0F7 /* SigNetworkManager.h */,
-				25D88BCC2361392100D4F0F7 /* SigNetworkManager.m */,
-				25151BF82362F2AC00967668 /* SigMessageHandle.h */,
-				25151BF92362F2AC00967668 /* SigMessageHandle.m */,
-				25335CB4235ED9EE006C79C1 /* Access Layer */,
-				25335CBD235ED9EE006C79C1 /* Network Layer */,
-				25335CC3235ED9EE006C79C1 /* Lower Transport Layer */,
-				25335CCE235ED9EE006C79C1 /* Upper Transport Layer */,
-			);
-			path = Layers;
-			sourceTree = "<group>";
-		};
-		25335CB4235ED9EE006C79C1 /* Access Layer */ = {
-			isa = PBXGroup;
-			children = (
-				25D88BEF2361456C00D4F0F7 /* SigAccessLayer.h */,
-				25D88BEE2361456C00D4F0F7 /* SigAccessLayer.m */,
-				25D88BED2361456C00D4F0F7 /* SigAccessPdu.h */,
-				25D88BF02361456C00D4F0F7 /* SigAccessPdu.m */,
-			);
-			path = "Access Layer";
-			sourceTree = "<group>";
-		};
-		25335CBD235ED9EE006C79C1 /* Network Layer */ = {
-			isa = PBXGroup;
-			children = (
-				25D88BE92361455C00D4F0F7 /* SigNetworkLayer.h */,
-				25D88BEA2361455C00D4F0F7 /* SigNetworkLayer.m */,
-			);
-			path = "Network Layer";
-			sourceTree = "<group>";
-		};
-		25335CC3235ED9EE006C79C1 /* Lower Transport Layer */ = {
-			isa = PBXGroup;
-			children = (
-				25D88BFA2361458400D4F0F7 /* SigAccessMessage.h */,
-				25D88C082361458500D4F0F7 /* SigAccessMessage.m */,
-				25D88BFC2361458400D4F0F7 /* SigControlMessage.h */,
-				25D88C012361458400D4F0F7 /* SigControlMessage.m */,
-				25D88C042361458400D4F0F7 /* SigLowerTransportLayer.h */,
-				25D88C032361458400D4F0F7 /* SigLowerTransportLayer.m */,
-				25D88C072361458500D4F0F7 /* SigLowerTransportPdu.h */,
-				25D88BF92361458300D4F0F7 /* SigLowerTransportPdu.m */,
-				25D88BFF2361458400D4F0F7 /* SigSegmentAcknowledgmentMessage.h */,
-				25D88C062361458400D4F0F7 /* SigSegmentAcknowledgmentMessage.m */,
-				25D88BFE2361458400D4F0F7 /* SigSegmentedAccessMessage.h */,
-				25D88C022361458400D4F0F7 /* SigSegmentedAccessMessage.m */,
-				25D88C002361458400D4F0F7 /* SigSegmentedControlMessage.h */,
-				25D88BFB2361458400D4F0F7 /* SigSegmentedControlMessage.m */,
-				25D88C052361458400D4F0F7 /* SigSegmentedMessage.h */,
-				25D88BFD2361458400D4F0F7 /* SigSegmentedMessage.m */,
-			);
-			path = "Lower Transport Layer";
-			sourceTree = "<group>";
-		};
-		25335CCE235ED9EE006C79C1 /* Upper Transport Layer */ = {
-			isa = PBXGroup;
-			children = (
-				25D88C1C2361459100D4F0F7 /* SigHearbeatMessage.h */,
-				25D88C1A2361459100D4F0F7 /* SigHearbeatMessage.m */,
-				25D88C1E2361459100D4F0F7 /* SigUpperTransportLayer.h */,
-				25D88C1B2361459100D4F0F7 /* SigUpperTransportLayer.m */,
-				25D88C1D2361459100D4F0F7 /* SigUpperTransportPdu.h */,
-				25D88C192361459100D4F0F7 /* SigUpperTransportPdu.m */,
-			);
-			path = "Upper Transport Layer";
-			sourceTree = "<group>";
-		};
-		25335CD5235ED9EE006C79C1 /* Mesh Messages */ = {
-			isa = PBXGroup;
-			children = (
-				25335D14235ED9EF006C79C1 /* Proxy Configuration */,
-				252ABF5E236057A60096563F /* SigMeshMessage.h */,
-				252ABF5F236057A60096563F /* SigMeshMessage.m */,
-				252ABF60236057A60096563F /* SigConfigMessage.h */,
-				252ABF61236057A70096563F /* SigConfigMessage.m */,
-				25957EC8237AC6C100816137 /* SigGenericMessage.h */,
-				25957EC9237AC6C100816137 /* SigGenericMessage.m */,
-			);
-			path = "Mesh Messages";
-			sourceTree = "<group>";
-		};
-		25335D14235ED9EF006C79C1 /* Proxy Configuration */ = {
-			isa = PBXGroup;
-			children = (
-				2590208E2369390E005649DE /* SigProxyConfigurationMessage.h */,
-				2590208F2369390E005649DE /* SigProxyConfigurationMessage.m */,
-			);
-			path = "Proxy Configuration";
-			sourceTree = "<group>";
-		};
-		25335D42235ED9EF006C79C1 /* Bearer */ = {
-			isa = PBXGroup;
-			children = (
-				25B8764B24850474006C76CB /* SigBluetooth.h */,
-				25B8764A24850474006C76CB /* SigBluetooth.m */,
-				25335F4D235EEBED006C79C1 /* ProxyProtocolHandler.h */,
-				25335F4F235EEBED006C79C1 /* ProxyProtocolHandler.m */,
-				25335F4C235EEBED006C79C1 /* SigBearer.h */,
-				25335F4E235EEBED006C79C1 /* SigBearer.m */,
-			);
-			path = Bearer;
-			sourceTree = "<group>";
-		};
 		25335D58235ED9EF006C79C1 /* Third Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -788,103 +643,6 @@
 				25FF2F4E2446EFDC0084263F /* GMEllipticCurveCrypto */,
 			);
 			path = "Third Library";
-			sourceTree = "<group>";
-		};
-		25335DAC235ED9EF006C79C1 /* Type Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				25D88C2D236148FF00D4F0F7 /* CBUUID+Hex.h */,
-				25D88C2E236148FF00D4F0F7 /* CBUUID+Hex.m */,
-			);
-			path = "Type Extensions";
-			sourceTree = "<group>";
-		};
-		25335DB5235ED9F0006C79C1 /* Mesh Model */ = {
-			isa = PBXGroup;
-			children = (
-				25335F35235EE2A7006C79C1 /* SigModel.h */,
-				25335F34235EE2A6006C79C1 /* SigModel.m */,
-				25335F49235EEB92006C79C1 /* SigPdu.h */,
-				25335F48235EEB92006C79C1 /* SigPdu.m */,
-			);
-			path = "Mesh Model";
-			sourceTree = "<group>";
-		};
-		25335DD4235ED9F0006C79C1 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				25335DD7235ED9F0006C79C1 /* SigLogger.h */,
-				25335DE0235ED9F0006C79C1 /* SigLogger.m */,
-				25335F39235EE873006C79C1 /* SigDataSource.h */,
-				25335F38235EE873006C79C1 /* SigDataSource.m */,
-				25335DE1235ED9F0006C79C1 /* OpenSSLHelper.h */,
-				25335DDC235ED9F0006C79C1 /* OpenSSLHelper.m */,
-				25335DDE235ED9F0006C79C1 /* SigECCEncryptHelper.h */,
-				25335DD6235ED9F0006C79C1 /* SigECCEncryptHelper.m */,
-				25335F41235EE94C006C79C1 /* LibTools.h */,
-				25335F40235EE94C006C79C1 /* LibTools.m */,
-				25D88BDA2361443000D4F0F7 /* SigHelper.h */,
-				25D88BD92361443000D4F0F7 /* SigHelper.m */,
-				25335F8F235F06D3006C79C1 /* SDKLibCommand.h */,
-				25335F8E235F06D3006C79C1 /* SDKLibCommand.m */,
-				258A003F23A8BA5A003D2148 /* OTAManager.h */,
-				258A003E23A8BA5A003D2148 /* OTAManager.m */,
-				25C30DC02469309600F06076 /* MeshOTAManager.h */,
-				25B95FE8238E4DBD00244D14 /* BackgroundTimer.h */,
-				25B95FE9238E4DBD00244D14 /* BackgroundTimer.m */,
-				25D9E67C23ACD9B6001E4747 /* SigPublishManager.h */,
-				25D9E67D23ACD9B6001E4747 /* SigPublishManager.m */,
-				256A68B72459129C00131CC4 /* TelinkHttpManager.h */,
-				256A68B82459129C00131CC4 /* TelinkHttpManager.m */,
-				25B95FEC238E595600244D14 /* SigConst.h */,
-				25B95FED238E595600244D14 /* SigConst.m */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		25335F5D235EF339006C79C1 /* Add devices Module */ = {
-			isa = PBXGroup;
-			children = (
-				25335F67235EF339006C79C1 /* SigAddDeviceManager.h */,
-				25335F6B235EF339006C79C1 /* SigAddDeviceManager.m */,
-				25E60F262435980B00620E29 /* SigFastProvisionAddManager.h */,
-				25E60F272435980B00620E29 /* SigFastProvisionAddManager.m */,
-				25C30DBD2469304300F06076 /* SigRemoteAddManager.h */,
-				25335F5E235EF339006C79C1 /* Provisioning */,
-				25335F68235EF339006C79C1 /* KeyBind */,
-			);
-			path = "Add devices Module";
-			sourceTree = "<group>";
-		};
-		25335F5E235EF339006C79C1 /* Provisioning */ = {
-			isa = PBXGroup;
-			children = (
-				25335F64235EF339006C79C1 /* SigProvisioningManager.h */,
-				25335F61235EF339006C79C1 /* SigProvisioningManager.m */,
-				25335F66235EF339006C79C1 /* SigProvisioningData.h */,
-				25335F62235EF339006C79C1 /* SigProvisioningData.m */,
-				25335F63235EF339006C79C1 /* SigAuthenticationModel.h */,
-				25335F5F235EF339006C79C1 /* SigAuthenticationModel.m */,
-			);
-			path = Provisioning;
-			sourceTree = "<group>";
-		};
-		25335F68235EF339006C79C1 /* KeyBind */ = {
-			isa = PBXGroup;
-			children = (
-				25335F6A235EF339006C79C1 /* SigKeyBindManager.h */,
-				25335F69235EF339006C79C1 /* SigKeyBindManager.m */,
-			);
-			path = KeyBind;
-			sourceTree = "<group>";
-		};
-		254072A625C8E37100D0FF8B /* subnet bridge */ = {
-			isa = PBXGroup;
-			children = (
-				254072A725C8E48200D0FF8B /* SDKLibCommand+subnetBridge.h */,
-				254072A825C8E48200D0FF8B /* SDKLibCommand+subnetBridge.m */,
-			);
-			path = "subnet bridge";
 			sourceTree = "<group>";
 		};
 		255394A024907A9B0095B499 /* OpenSSL */ = {
@@ -1010,7 +768,6 @@
 				25C0AFDB235D597400846CFB /* TelinkSigMeshLib */,
 				25CE4E59254A910E004E6F12 /* TelinkSigMeshLibTests */,
 				25C0AFDA235D597400846CFB /* Products */,
-				2528952A2468F13400E590F9 /* TelinkSigMeshLib copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1032,17 +789,101 @@
 				25335F54235EEC61006C79C1 /* SigStruct.h */,
 				252ABF6623605B330096563F /* SigMeshLib.h */,
 				252ABF6723605B330096563F /* SigMeshLib.m */,
-				2528952B2468F6F200E590F9 /* Extensions */,
-				25335F5D235EF339006C79C1 /* Add devices Module */,
-				25335D42235ED9EF006C79C1 /* Bearer */,
-				25335CB3235ED9EE006C79C1 /* Layers */,
-				25335CD5235ED9EE006C79C1 /* Mesh Messages */,
-				25335DB5235ED9F0006C79C1 /* Mesh Model */,
-				25335D58235ED9EF006C79C1 /* Third Library */,
-				25335DAC235ED9EF006C79C1 /* Type Extensions */,
-				25335DD4235ED9F0006C79C1 /* Utils */,
+				25335F67235EF339006C79C1 /* SigAddDeviceManager.h */,
+				25335F6B235EF339006C79C1 /* SigAddDeviceManager.m */,
+				25E60F262435980B00620E29 /* SigFastProvisionAddManager.h */,
+				25E60F272435980B00620E29 /* SigFastProvisionAddManager.m */,
+				25C30DBD2469304300F06076 /* SigRemoteAddManager.h */,
+				25335F64235EF339006C79C1 /* SigProvisioningManager.h */,
+				25335F61235EF339006C79C1 /* SigProvisioningManager.m */,
+				25335F66235EF339006C79C1 /* SigProvisioningData.h */,
+				25335F62235EF339006C79C1 /* SigProvisioningData.m */,
+				25335F63235EF339006C79C1 /* SigAuthenticationModel.h */,
+				25335F5F235EF339006C79C1 /* SigAuthenticationModel.m */,
+				25335F6A235EF339006C79C1 /* SigKeyBindManager.h */,
+				25335F69235EF339006C79C1 /* SigKeyBindManager.m */,
+				25B8764B24850474006C76CB /* SigBluetooth.h */,
+				25B8764A24850474006C76CB /* SigBluetooth.m */,
+				25335F4D235EEBED006C79C1 /* ProxyProtocolHandler.h */,
+				25335F4F235EEBED006C79C1 /* ProxyProtocolHandler.m */,
+				25335F4C235EEBED006C79C1 /* SigBearer.h */,
+				25335F4E235EEBED006C79C1 /* SigBearer.m */,
+				25D88BCA2361392100D4F0F7 /* SigKeySet.h */,
+				25D88BC92361392100D4F0F7 /* SigKeySet.m */,
+				25D88BCB2361392100D4F0F7 /* SigNetworkManager.h */,
+				25D88BCC2361392100D4F0F7 /* SigNetworkManager.m */,
+				25151BF82362F2AC00967668 /* SigMessageHandle.h */,
+				25151BF92362F2AC00967668 /* SigMessageHandle.m */,
+				25D88BEF2361456C00D4F0F7 /* SigAccessLayer.h */,
+				25D88BEE2361456C00D4F0F7 /* SigAccessLayer.m */,
+				25D88BED2361456C00D4F0F7 /* SigAccessPdu.h */,
+				25D88BF02361456C00D4F0F7 /* SigAccessPdu.m */,
+				25D88BE92361455C00D4F0F7 /* SigNetworkLayer.h */,
+				25D88BEA2361455C00D4F0F7 /* SigNetworkLayer.m */,
+				25D88BFA2361458400D4F0F7 /* SigAccessMessage.h */,
+				25D88C082361458500D4F0F7 /* SigAccessMessage.m */,
+				25D88BFC2361458400D4F0F7 /* SigControlMessage.h */,
+				25D88C012361458400D4F0F7 /* SigControlMessage.m */,
+				25D88C042361458400D4F0F7 /* SigLowerTransportLayer.h */,
+				25D88C032361458400D4F0F7 /* SigLowerTransportLayer.m */,
+				25D88C072361458500D4F0F7 /* SigLowerTransportPdu.h */,
+				25D88BF92361458300D4F0F7 /* SigLowerTransportPdu.m */,
+				25D88BFF2361458400D4F0F7 /* SigSegmentAcknowledgmentMessage.h */,
+				25D88C062361458400D4F0F7 /* SigSegmentAcknowledgmentMessage.m */,
+				25D88BFE2361458400D4F0F7 /* SigSegmentedAccessMessage.h */,
+				25D88C022361458400D4F0F7 /* SigSegmentedAccessMessage.m */,
+				25D88C002361458400D4F0F7 /* SigSegmentedControlMessage.h */,
+				25D88BFB2361458400D4F0F7 /* SigSegmentedControlMessage.m */,
+				25D88C052361458400D4F0F7 /* SigSegmentedMessage.h */,
+				25D88BFD2361458400D4F0F7 /* SigSegmentedMessage.m */,
+				25D88C1C2361459100D4F0F7 /* SigHearbeatMessage.h */,
+				25D88C1A2361459100D4F0F7 /* SigHearbeatMessage.m */,
+				25D88C1E2361459100D4F0F7 /* SigUpperTransportLayer.h */,
+				25D88C1B2361459100D4F0F7 /* SigUpperTransportLayer.m */,
+				25D88C1D2361459100D4F0F7 /* SigUpperTransportPdu.h */,
+				25D88C192361459100D4F0F7 /* SigUpperTransportPdu.m */,
+				252ABF5E236057A60096563F /* SigMeshMessage.h */,
+				252ABF5F236057A60096563F /* SigMeshMessage.m */,
+				252ABF60236057A60096563F /* SigConfigMessage.h */,
+				252ABF61236057A70096563F /* SigConfigMessage.m */,
+				25957EC8237AC6C100816137 /* SigGenericMessage.h */,
+				25957EC9237AC6C100816137 /* SigGenericMessage.m */,
+				2590208E2369390E005649DE /* SigProxyConfigurationMessage.h */,
+				2590208F2369390E005649DE /* SigProxyConfigurationMessage.m */,
+				25335F35235EE2A7006C79C1 /* SigModel.h */,
+				25335F34235EE2A6006C79C1 /* SigModel.m */,
+				25335F49235EEB92006C79C1 /* SigPdu.h */,
+				25335F48235EEB92006C79C1 /* SigPdu.m */,
+				25D88C2D236148FF00D4F0F7 /* CBUUID+Hex.h */,
+				25D88C2E236148FF00D4F0F7 /* CBUUID+Hex.m */,
+				25335DD7235ED9F0006C79C1 /* SigLogger.h */,
+				25335DE0235ED9F0006C79C1 /* SigLogger.m */,
+				25335F39235EE873006C79C1 /* SigDataSource.h */,
+				25335F38235EE873006C79C1 /* SigDataSource.m */,
+				25335DE1235ED9F0006C79C1 /* OpenSSLHelper.h */,
+				25335DDC235ED9F0006C79C1 /* OpenSSLHelper.m */,
+				25335DDE235ED9F0006C79C1 /* SigECCEncryptHelper.h */,
+				25335DD6235ED9F0006C79C1 /* SigECCEncryptHelper.m */,
+				25335F41235EE94C006C79C1 /* LibTools.h */,
+				25335F40235EE94C006C79C1 /* LibTools.m */,
+				25D88BDA2361443000D4F0F7 /* SigHelper.h */,
+				25D88BD92361443000D4F0F7 /* SigHelper.m */,
+				25335F8F235F06D3006C79C1 /* SDKLibCommand.h */,
+				25335F8E235F06D3006C79C1 /* SDKLibCommand.m */,
+				258A003F23A8BA5A003D2148 /* OTAManager.h */,
+				258A003E23A8BA5A003D2148 /* OTAManager.m */,
+				25C30DC02469309600F06076 /* MeshOTAManager.h */,
+				25B95FE8238E4DBD00244D14 /* BackgroundTimer.h */,
+				25B95FE9238E4DBD00244D14 /* BackgroundTimer.m */,
+				25D9E67C23ACD9B6001E4747 /* SigPublishManager.h */,
+				25D9E67D23ACD9B6001E4747 /* SigPublishManager.m */,
+				256A68B72459129C00131CC4 /* TelinkHttpManager.h */,
+				256A68B82459129C00131CC4 /* TelinkHttpManager.m */,
+				25B95FEC238E595600244D14 /* SigConst.h */,
+				25B95FED238E595600244D14 /* SigConst.m */,
 				25C0AFDD235D597400846CFB /* Info.plist */,
 				25335C6D235EB046006C79C1 /* TelinkSigMeshLibPrefixHeader.pch */,
+				25335D58235ED9EF006C79C1 /* Third Library */,
 			);
 			path = TelinkSigMeshLib;
 			sourceTree = "<group>";
@@ -1102,7 +943,6 @@
 				252894772468F13400E590F9 /* SigDataSource.h in Headers */,
 				252894732468F13400E590F9 /* SigAddDeviceManager.h in Headers */,
 				252894702468F13400E590F9 /* SigPdu.h in Headers */,
-				254072A925C8E48200D0FF8B /* SDKLibCommand+subnetBridge.h in Headers */,
 				2528947A2468F13400E590F9 /* SigEnumeration.h in Headers */,
 				2528948B2468F13400E590F9 /* SigConfigMessage.h in Headers */,
 				252894812468F13400E590F9 /* SDKLibCommand.h in Headers */,
@@ -1521,7 +1361,6 @@
 				252894F22468F13400E590F9 /* SigPublishManager.m in Sources */,
 				252894F32468F13400E590F9 /* SigBearer.m in Sources */,
 				252894F42468F13400E590F9 /* SDKLibCommand.m in Sources */,
-				252895322468F6F300E590F9 /* SigRemoteAddManager.m in Sources */,
 				252894F62468F13400E590F9 /* SigAccessLayer.m in Sources */,
 				252894F72468F13400E590F9 /* SigControlMessage.m in Sources */,
 				252894F82468F13400E590F9 /* SigDataSource.m in Sources */,
@@ -1540,14 +1379,12 @@
 				252895072468F13400E590F9 /* SigGenericMessage.m in Sources */,
 				252895082468F13400E590F9 /* SigLowerTransportLayer.m in Sources */,
 				252895092468F13400E590F9 /* SigMeshMessage.m in Sources */,
-				254072AA25C8E48200D0FF8B /* SDKLibCommand+subnetBridge.m in Sources */,
 				2528950A2468F13400E590F9 /* SigSegmentedControlMessage.m in Sources */,
 				2528950B2468F13400E590F9 /* SigNetworkLayer.m in Sources */,
 				2528950D2468F13400E590F9 /* LibTools.m in Sources */,
 				2528950E2468F13400E590F9 /* SigUpperTransportLayer.m in Sources */,
 				2528950F2468F13400E590F9 /* SigKeyBindManager.m in Sources */,
 				252895102468F13400E590F9 /* SigMeshLib.m in Sources */,
-				252895352468F6F300E590F9 /* MeshOTAManager.m in Sources */,
 				252895132468F13400E590F9 /* SigLogger.m in Sources */,
 				252895142468F13400E590F9 /* CBUUID+Hex.m in Sources */,
 				252895152468F13400E590F9 /* SigECCEncryptHelper.m in Sources */,
@@ -1786,7 +1623,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1844,7 +1681,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1906,7 +1743,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 4JBU2XTM9L;
+				DEVELOPMENT_TEAM = J3AJAYU5N6;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
