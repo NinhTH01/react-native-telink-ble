@@ -1,12 +1,13 @@
-import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import type { FC, LazyExoticComponent } from 'react';
 import React, { Suspense } from 'react';
 import { AppRegistry, Platform } from 'react-native';
+import 'react-native-gesture-handler';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
+import 'react-native-telink-ble';
 import { name as appName } from './app.json';
 import { appStorage } from './src/app/app-storage';
 import { globalState } from './src/app/global-state';

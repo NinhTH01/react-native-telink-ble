@@ -1,8 +1,9 @@
-@objc(TelinkBle)
-class TelinkBle: NSObject {
+//
+//  TelinkBle.swift
+//  TelinkBle
+//
+//  Created by Thanh Tùng on 02/07/2021.
+//  Copyright © 2021 Facebook. All rights reserved.
+//
 
-    @objc(multiply:withB:withResolver:withRejecter:)
-    func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-        resolve(a*b)
-    }
-}
+import Foundation

@@ -33,7 +33,10 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
 
   React.useEffect(() => {
     return navigation?.addListener('focus', () => {
-      TelinkBle.getNodes().then(setNodes);
+      TelinkBle.getNodes().then((n: NodeInfo[]) => {
+        console.log(n);
+        setNodes(n);
+      });
     });
   }, [navigation]);
 

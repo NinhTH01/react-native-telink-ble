@@ -58,7 +58,11 @@ export const DeviceControlScreen: FC<DeviceControlProps> = (
           TelinkBle.setTemp(node.unicastId, value);
         }}
       />
-      <ColorPicker onColorChange={handleChangeColor} style={styles.picker} />
+      <ColorPicker
+        sliderComponent={Slider as any}
+        onColorChange={handleChangeColor}
+        style={styles.picker}
+      />
     </>
   );
 };

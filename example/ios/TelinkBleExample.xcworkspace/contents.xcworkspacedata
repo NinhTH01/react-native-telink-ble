@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../ios/TelinkBle.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:TelinkBleExample.xcodeproj">
    </FileRef>
    <FileRef
