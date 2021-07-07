@@ -1,4 +1,4 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import { BleEvent } from './ble-event';
 import type { BluetoothState } from './bluetooth-state';
 import type { BoundDevice } from './bound-device';
@@ -94,8 +94,24 @@ class TelinkBle implements TelinkBleNativeModule {
     TelinkBleModule.setSceneForController(deviceId, mode, sceneId);
   }
 
+  public resetBle(): void {
+    TelinkBleModule.resetBle();
+  }
+
   public kickOut(deviceId: number): void {
     TelinkBleModule.kickOut(deviceId);
+  }
+
+  public forceRemoveNodeAtAddress(address: number): void {
+    TelinkBleModule.forceRemoveNodeAtAddress(address);
+  }
+
+  public startMeshSDK(): void {
+    if (Platform.OS === 'ios') {
+      TelinkBleModule.startMeshSDK();
+      return;
+    }
+    console.warn(`${Platform.OS} does not need to call startMeshSDK`);
   }
 
   /**

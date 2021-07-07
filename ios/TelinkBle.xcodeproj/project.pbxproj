@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		53CE0D89268F00D5008E8AC3 /* TelinkBle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CE0D88268F00D5008E8AC3 /* TelinkBle.swift */; };
+		5304BE2626954C6D00BE9849 /* TelinkBle.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304BE1C26954C6D00BE9849 /* TelinkBle.m */; };
+		5304BE2726954C6D00BE9849 /* DemoCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304BE1D26954C6D00BE9849 /* DemoCommand.m */; };
+		5304BE2926954C6D00BE9849 /* AddDeviceStateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304BE1F26954C6D00BE9849 /* AddDeviceStateModel.m */; };
+		5304BE2A26954C6D00BE9849 /* AddState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304BE2426954C6D00BE9849 /* AddState.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,8 +27,14 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libTelinkBle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTelinkBle.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		53CE0D88268F00D5008E8AC3 /* TelinkBle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelinkBle.swift; sourceTree = "<group>"; };
-		53DC6FA3268EB09E000248C7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
+		5304BE1C26954C6D00BE9849 /* TelinkBle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TelinkBle.m; sourceTree = "<group>"; };
+		5304BE1D26954C6D00BE9849 /* DemoCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCommand.m; sourceTree = "<group>"; };
+		5304BE1F26954C6D00BE9849 /* AddDeviceStateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDeviceStateModel.m; sourceTree = "<group>"; };
+		5304BE2026954C6D00BE9849 /* AddState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddState.h; sourceTree = "<group>"; };
+		5304BE2126954C6D00BE9849 /* TelinkBle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TelinkBle.h; sourceTree = "<group>"; };
+		5304BE2226954C6D00BE9849 /* DemoCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoCommand.h; sourceTree = "<group>"; };
+		5304BE2426954C6D00BE9849 /* AddState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddState.m; sourceTree = "<group>"; };
+		5304BE2526954C6D00BE9849 /* AddDeviceStateModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDeviceStateModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,10 +56,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5304BE1B26954C6D00BE9849 /* TelinkBle */ = {
+			isa = PBXGroup;
+			children = (
+				5304BE2526954C6D00BE9849 /* AddDeviceStateModel.h */,
+				5304BE1F26954C6D00BE9849 /* AddDeviceStateModel.m */,
+				5304BE2026954C6D00BE9849 /* AddState.h */,
+				5304BE2426954C6D00BE9849 /* AddState.m */,
+				5304BE2226954C6D00BE9849 /* DemoCommand.h */,
+				5304BE1D26954C6D00BE9849 /* DemoCommand.m */,
+				5304BE2126954C6D00BE9849 /* TelinkBle.h */,
+				5304BE1C26954C6D00BE9849 /* TelinkBle.m */,
+			);
+			path = TelinkBle;
+			sourceTree = "<group>";
+		};
 		53DC6FA2268EB09D000248C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				53DC6FA3268EB09E000248C7 /* CoreBluetooth.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -58,7 +81,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				53CE0D88268F00D5008E8AC3 /* TelinkBle.swift */,
+				5304BE1B26954C6D00BE9849 /* TelinkBle */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				53DC6FA2268EB09D000248C7 /* Frameworks */,
 			);
@@ -121,7 +144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53CE0D89268F00D5008E8AC3 /* TelinkBle.swift in Sources */,
+				5304BE2726954C6D00BE9849 /* DemoCommand.m in Sources */,
+				5304BE2626954C6D00BE9849 /* TelinkBle.m in Sources */,
+				5304BE2926954C6D00BE9849 /* AddDeviceStateModel.m in Sources */,
+				5304BE2A26954C6D00BE9849 /* AddState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +199,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -218,7 +244,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -234,7 +260,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
-					"\"$(SRCROOT)/TelinkSigMeshLib/Third Library/OpenSSL/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -262,7 +287,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
-					"\"$(SRCROOT)/TelinkSigMeshLib/Third Library/OpenSSL/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

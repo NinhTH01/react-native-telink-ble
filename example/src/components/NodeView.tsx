@@ -7,6 +7,7 @@ import {
   TouchableOpacityProps,
   View,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import type { NodeInfo } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -50,6 +51,14 @@ export default function NodeView(props: NodeViewProps) {
       </View>
       <Text>{node.unicastId}</Text>
       <Switch value={onOff} onValueChange={handleOnOff} />
+      <Button
+        onPress={() => {
+          TelinkBle.kickOut(node.unicastId);
+          TelinkBle.forceRemoveNodeAtAddress(node.unicastId);
+        }}
+      >
+        Kick out
+      </Button>
     </TouchableOpacity>
   );
 }

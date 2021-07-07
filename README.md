@@ -93,7 +93,107 @@ dependencies {
 
 #### Reload project
 
+### iOS
+
+#### Define your permissions usage in Info.plist:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- ... -->
+  <key>NSLocationWhenInUseUsageDescription</key>
+	<string>App needs location permission to find and connect to other devices around you</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>App needs bluetooth permission to find and connect to other devices on your network</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>App needs bluetooth permission to find and connect to other devices on your network</string>
+   <!-- ... -->
+</dict>
+```
+
+#### Manual linking
+
+Add to Podfile:
+
+```ruby
+  pod 'RNTelinkBle', :path => '../node_modules/react-native-telink-ble'
+  pod 'TelinkSigMeshLib', :path => '../node_modules/react-native-telink-ble/TelinkSigMeshLib'
+  pod 'OpenSSL-Universal'
+```
+
+Then run `pod install` in ios directory
+
 ## Usage
+
+**`startMeshSDK` (iOS Only)**
+
+Call this method once, not in component lifecycle to initialize mesh sdk on iOS
+
+---
+
+**`startScanning(): void`**
+
+Start device scanning.
+
+---
+
+**`stopScanning(): void`**
+
+---
+
+**`setHsl(unicastId: number, hsl: {h: number; s: number; l: number}): void`**
+
+Set HSL values for RGB devices
+
+`h`: in range 0..359
+
+`s`: in range 0..100
+
+`l`: in range 0..100
+
+---
+
+**`setOnOff(unicastId: number, onOff: 0 | 1): void`**
+
+Set device on-off status (0: ON, 1: OFF)
+
+---
+
+**`setAllOff(): void`**
+
+Turn off all devices on mesh network
+
+---
+
+**`setAllOn(): void`**
+
+Turn on all devices on mesh network
+
+---
+
+**`setLuminance(unicastId: number, luminance: number): void`**
+
+Set luminance (dimming) for device: luminance value in range 0..100
+
+---
+
+**`setTemp(unicastId: number, temp: number): void`**
+
+Set temperature (CTL) for device: temp value in range 0..100
+
+---
+
+**`kickOut(unicastId: number): void`**
+
+Reset a node with address: `unicastId`
+
+---
+
+**`forceRemoveNodeAtAddress(unicastId: number): void`**
+
+Force remove node at address `unicastId`, even when reset processing failed
 
 ## Contributing
 

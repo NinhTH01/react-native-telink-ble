@@ -30,7 +30,7 @@
 #import "SigProvisioningData.h"
 #import "SigModel.h"
 #import "OpenSSLHelper.h"
-#import "ec.h"
+#import <openssl/ec.h>
 #import "SigECCEncryptHelper.h"
 
 NSString *const sessionKeyOfCalculateKeys = @"sessionKeyOfCalculateKeys";

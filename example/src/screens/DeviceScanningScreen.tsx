@@ -2,8 +2,7 @@ import type { StackScreenProps } from '@react-navigation/stack';
 import React, { FC, Reducer } from 'react';
 import { FlatList, ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button } from 'react-native-paper';
-import { BleEvent, Device } from 'react-native-telink-ble';
-import TelinkBle from 'react-native-telink-ble';
+import TelinkBle, { Device } from 'react-native-telink-ble';
 import nameof from 'ts-nameof.macro';
 import DeviceView from '../components/DeviceView';
 import { deviceReducer, DeviceReducerAction } from '../reducers/device-reducer';
@@ -40,42 +39,16 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
 
   React.useEffect(() => {
     return TelinkBle.addScanningTimeoutListener(() => {
-      console.log('STOP_SCANNING');
       handleStopScanning();
     });
   }, [handleStopScanning]);
 
   React.useEffect(() => {
-    return TelinkBle.addEventListener(
-      BleEvent.EVENT_PROVISIONING_SUCCESS,
-      console.log
-    );
-  }, []);
-
-  React.useEffect(() => {
-    return TelinkBle.addEventListener(
-      BleEvent.EVENT_PROVISIONING_FAILED,
-      console.log
-    );
-  }, []);
-
-  React.useEffect(() => {
-    return TelinkBle.addEventListener(
-      BleEvent.EVENT_BINDING_SUCCESS,
-      console.log
-    );
-  }, []);
-
-  React.useEffect(() => {
-    return TelinkBle.addEventListener(
-      BleEvent.EVENT_BINDING_FAILED,
-      console.log
-    );
-  }, []);
-
-  React.useEffect(() => {
     return TelinkBle.addDeviceFoundListener((device: Device) => {
-      console.log(device);
+      dispatch({
+        type: 'add',
+        device,
+      });
     });
   }, []);
 

@@ -132,4 +132,25 @@ export interface TelinkBleNativeModule {
    * @param deviceId {number} - Mesh address
    */
   kickOut(deviceId: number): void;
+
+  /**
+   * Reset BLE network
+   *
+   * @return {void}
+   */
+  resetBle(): void;
+
+  /**
+   * Force remove node
+   *
+   * @param address {number} - Device unicast ID
+   */
+  forceRemoveNodeAtAddress(address: number): void;
+
+  /**
+   * Start mesh SDK
+   *
+   * (iOS Only)
+   */
+  startMeshSDK(): void;
 }

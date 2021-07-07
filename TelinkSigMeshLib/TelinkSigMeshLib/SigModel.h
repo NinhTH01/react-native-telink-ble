@@ -28,6 +28,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import "SigEnumeration.h"
+#import "SigStruct.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class SigNetkeyDerivaties,OpenSSLHelper,SigRangeModel,SigSceneRangeModel,SigNodeFeatures,SigRelayretransmitModel,SigNetworktransmitModel,SigElementModel,SigNodeKeyModel,SigModelIDModel,SigRetransmitModel,SigPeriodModel,SigHeartbeatPubModel,SigHeartbeatSubModel,SigBaseMeshMessage,SigConfigNetworkTransmitSet,SigConfigNetworkTransmitStatus,SigPublishModel,SigNodeModel,SigMeshMessage,SigNetkeyModel,SigAppkeyModel,SigIvIndex,SigPage0,SigSubnetBridgeModel;

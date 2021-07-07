@@ -12,10 +12,13 @@ import { name as appName } from './app.json';
 import { appStorage } from './src/app/app-storage';
 import { globalState } from './src/app/global-state';
 import { showError } from './src/helpers/toast';
+import TelinkBle from 'react-native-telink-ble';
 
 enableScreens();
 
 const App: LazyExoticComponent<FC> = React.lazy(async () => {
+  TelinkBle.startMeshSDK();
+
   await appStorage.initialize();
   await globalState.initialize();
 

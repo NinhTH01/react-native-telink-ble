@@ -28,6 +28,7 @@ export const DeviceControlScreen: FC<DeviceControlProps> = (
       const v = c.v * 100;
       const hex = hsv2Hex({ h, s, v });
       const hsl = hex2Hsl(hex);
+      console.log(hsl);
       setColor(hex);
       TelinkBle.setHsl(node.unicastId, hsl);
     },
