@@ -16,10 +16,14 @@ interface NodeViewProps extends TouchableOpacityProps {
   node: NodeInfo;
 
   index: number;
+
+  isSwitch: boolean;
+
+  selected?: boolean;
 }
 
 export default function NodeView(props: NodeViewProps) {
-  const { node, ...restProps } = props;
+  const { node, isSwitch, selected, ...restProps } = props;
 
   const [onOff, setOnOff] = React.useState<boolean>(false);
 
@@ -32,7 +36,10 @@ export default function NodeView(props: NodeViewProps) {
   );
 
   return (
-    <TouchableOpacity style={styles.container} {...restProps}>
+    <TouchableOpacity
+      style={[styles.container, selected && styles.borderSelect]}
+      {...restProps}
+    >
       <View style={styles.head}>
         <MaterialIcons name="laptop" size={20} style={styles.icon} />
         <Text>MAC</Text>
@@ -50,7 +57,7 @@ export default function NodeView(props: NodeViewProps) {
         <Text>Unicast ID</Text>
       </View>
       <Text>{node.unicastId}</Text>
-      <Switch value={onOff} onValueChange={handleOnOff} />
+      {isSwitch && <Switch value={onOff} onValueChange={handleOnOff} />}
       <Button
         onPress={() => {
           TelinkBle.kickOut(node.unicastId);
@@ -119,5 +126,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
     marginBottom: 4,
+  },
+  borderSelect: {
+    borderColor: 'green',
+    borderWidth: 2,
   },
 });
