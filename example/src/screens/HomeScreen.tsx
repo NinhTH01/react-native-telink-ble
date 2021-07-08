@@ -108,6 +108,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
   const [scene, isScene] = React.useState<boolean>(false);
 
   const handleToggleScene = React.useCallback(() => {
+    setNodeSelected([]);
     isScene(!scene);
   }, [scene]);
 
@@ -127,8 +128,6 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
     [nodeSelected]
   );
 
-  console.log(nodeSelected);
-
   const handleSelectAll = React.useCallback(() => {
     if (nodeSelected.length !== 0 && nodeSelected.length === nodes.length) {
       setNodeSelected([]);
@@ -137,17 +136,38 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
     }
   }, [nodeSelected.length, nodes]);
 
-  const handleSave = React.useCallback(async () => {
-    const sceneAsync = await asyncStorageRepository.getScene();
-    if (sceneAsync) {
-      TelinkBle.setSceneForListDevice(
-        Number(Object.keys(sceneAsync)[Object.keys(sceneAsync).length - 1]) + 1,
-        nodeSelected
-      );
-    } else {
-      TelinkBle.setSceneForListDevice(4153, nodeSelected);
-    }
-  }, [nodeSelected]);
+  const [currentSceneId, setCurrentSceneId] = React.useState<number>();
+
+  const handleSave = React.useCallback(
+    async (count: number) => {
+      const sceneAsync = await asyncStorageRepository.getScene();
+      if (sceneAsync) {
+        setCurrentSceneId(
+          Number(Object.keys(sceneAsync)[Object.keys(sceneAsync).length - 1]) +
+            1
+        );
+        TelinkBle.setSceneForDevice(
+          currentSceneId
+            ? currentSceneId
+            : Number(
+                Object.keys(sceneAsync)[Object.keys(sceneAsync).length - 1]
+              ) + 1,
+          nodeSelected[count].unicastId,
+          count === nodeSelected.length - 1,
+          count.toString()
+        );
+      } else {
+        setCurrentSceneId(4153);
+        TelinkBle.setSceneForDevice(
+          currentSceneId ? currentSceneId : Number(4153) + 1,
+          nodeSelected[count].unicastId,
+          count === nodeSelected.length - 1,
+          count.toString()
+        );
+      }
+    },
+    [currentSceneId, nodeSelected]
+  );
 
   const [listScene, setListScene] =
     // @ts-ignore
@@ -163,20 +183,25 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
   React.useEffect(() => {
     return TelinkBle.addEventListener(
       BleEvent.EVENT_SET_SCENE_SUCCESS,
-      async (id: number) => {
-        isScene(false);
-        showInfo('Success');
-        const sceneAsync = await asyncStorageRepository.getScene();
-        const albumMapper: Record<number, NodeInfo[]> = sceneAsync ?? {};
-        if (id) {
-          albumMapper[id] = nodeSelected;
+      async (id) => {
+        if (typeof id === 'number') {
+          isScene(false);
+          showInfo('Success');
+          const sceneAsync = await asyncStorageRepository.getScene();
+          const albumMapper: Record<number, NodeInfo[]> = sceneAsync ?? {};
+          if (id) {
+            albumMapper[id] = nodeSelected;
+          }
+          await asyncStorageRepository.saveScene(albumMapper);
+          setListScene(albumMapper);
+          setNodeSelected([]);
+        } else {
+          const index = (await Number(id)) + 1;
+          await handleSave(index);
         }
-        await asyncStorageRepository.saveScene(albumMapper);
-        setListScene(albumMapper);
-        setNodeSelected([]);
       }
     );
-  }, [nodeSelected, props.navigation]);
+  }, [handleSave, nodeSelected, props.navigation]);
 
   React.useEffect(() => {
     return TelinkBle.addEventListener(
@@ -238,6 +263,7 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
                     onPress={() => {
                       TelinkBle.getNodes().then((newNodes: NodeInfo[]) => {
                         setNodes(newNodes);
+                        asyncStorageRepository.removeScene();
                         console.log(newNodes);
                       });
                     }}
@@ -336,7 +362,12 @@ export const HomeScreen: FC<Partial<StackScreenProps<any>>> = (
               );
             }}
           />
-          <Pressable style={styles.btnSaveScene} onPress={handleSave}>
+          <Pressable
+            style={styles.btnSaveScene}
+            onPress={() => {
+              handleSave(0).then(() => {});
+            }}
+          >
             <Text style={styles.icon}>Lưu</Text>
           </Pressable>
         </Modal>
