@@ -54,10 +54,30 @@ export default function NodeView(props: NodeViewProps) {
       <Button
         onPress={() => {
           TelinkBle.kickOut(node.unicastId);
-          TelinkBle.forceRemoveNodeAtAddress(node.unicastId);
         }}
       >
         Kick out
+      </Button>
+      <Button
+        onPress={() => {
+          TelinkBle.setSceneForDevice(2, node.unicastId);
+        }}
+      >
+        Set scene
+      </Button>
+      <Button
+        onPress={() => {
+          TelinkBle.triggerScene(2);
+        }}
+      >
+        Trigger scene
+      </Button>
+      <Button
+        onPress={() => {
+          TelinkBle.removeSceneFromDevice(2, node.unicastId);
+        }}
+      >
+        Remove scene
       </Button>
     </TouchableOpacity>
   );

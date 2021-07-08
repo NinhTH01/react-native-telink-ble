@@ -118,6 +118,13 @@ export interface TelinkBleNativeModule {
   removeSceneFromDevice(sceneId: number, deviceId: number): void;
 
   /**
+   * Trigger a scene
+   *
+   * @param sceneId {number} - Scene ID
+   */
+  triggerScene(sceneId: number): void;
+
+  /**
    * Set scene for a scene controller button
    *
    * @param deviceId {number} - Device mesh address

@@ -32,6 +32,7 @@
 #define EVENT_MESH_CONNECT_SUCCESS  @"EVENT_MESH_CONNECT_SUCCESS"
 #define EVENT_MESH_CONNECT_FAILED   @"EVENT_MESH_CONNECT_FAILED"
 #define EVENT_DEVICE_RESPONSE       @"EVENT_DEVICE_RESPONSE"
+#define EVENT_BLE_SDK_BUSY          @"EVENT_BLE_SDK_BUSY"
 
 #define kShareWithBluetoothPointToPoint (YES)
 #define kShowScenes                     (YES)
@@ -54,6 +55,8 @@
 
 @property (strong, nonatomic) NSMutableArray<AddDeviceModel*> * _Nonnull source;
 
+- (BOOL)isBusy;
+
 - (void)startMeshSDK;
 
 - (void)updateDeviceProvisionSuccess:(NSString *_Nonnull)uuid address:(UInt16)address;
@@ -70,11 +73,11 @@
 
 - (void)setAllOff;
 
-- (void)setLuminance:(nonnull NSNumber*)address luminance:(nonnull NSNumber*)luminance;
-
-- (void)setHsl:(nonnull NSNumber*)address withHSL:(nonnull NSDictionary*)hsl;
+- (void)setLuminance:(nonnull NSNumber*)address withLuminance:(nonnull NSNumber*)luminance;
 
 - (void)setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature;
+
+- (void)setHsl:(nonnull NSNumber*)address withHSL:(nonnull NSDictionary*)hsl;
 
 - (void)autoConnect;
 
@@ -89,6 +92,16 @@
 - (void)forceRemoveNodeAtAddress:(nonnull NSNumber*)address;
 
 - (void)resetBle;
+
+- (void)addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+
+- (void)removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+
+- (void)setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
+
+- (void)removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
+
+- (void)triggerScene:(nonnull NSNumber*)sceneId;
 
 @end
 

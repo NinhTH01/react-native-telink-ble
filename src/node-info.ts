@@ -17,7 +17,15 @@ export interface NodeInfo {
 
   isDefaultBind: boolean;
 
+  isKeyBindSuccess: boolean;
+
+  security: string;
+
   lum: number;
 
   temp: number;
+
+  defaultTTL: number;
+
+  crpl: string;
 }

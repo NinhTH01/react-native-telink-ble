@@ -16,19 +16,48 @@
 RCT_EXPORT_MODULE()
 
 RCT_EXTERN_METHOD(startMeshSDK)
+
 RCT_EXTERN_METHOD(getNodes:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(startScanning)
+
 RCT_EXTERN_METHOD(stopScanning)
+
 RCT_EXTERN_METHOD(resetBle)
+
 RCT_EXTERN_METHOD(kickOut:(nonnull NSNumber*)address)
+
 RCT_EXTERN_METHOD(forceRemoveNodeAtAddress:(nonnull NSNumber*)address)
+
 RCT_EXTERN_METHOD(setOnOff:(int)address onOff:(int)onOff)
+
 RCT_EXTERN_METHOD(setAllOn)
+
 RCT_EXTERN_METHOD(setAllOff)
-RCT_EXTERN_METHOD(setLuminance:(nonnull NSNumber*)address luminance:(nonnull NSNumber*)luminance)
+
+RCT_EXTERN_METHOD(setLuminance:(nonnull NSNumber*)address withLuminance:(nonnull NSNumber*)luminance)
+
 RCT_EXTERN_METHOD(setHsl:(nonnull NSNumber*)address withHSL:(nonnull NSDictionary*)hsl)
+
 RCT_EXTERN_METHOD(setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature)
+
 RCT_EXTERN_METHOD(autoConnect)
+
+RCT_EXTERN_METHOD(setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId)
+
+RCT_EXTERN_METHOD(removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId)
+
+RCT_EXTERN_METHOD(triggerScene:(nonnull NSNumber*)sceneId)
+
+RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
+{
+    
+}
+
+- (BOOL)isBusy
+{
+    return SigMeshLib.share.isBusyNow;
+}
 
 - (void)startMeshSDK
 {
@@ -86,10 +115,6 @@ RCT_EXTERN_METHOD(autoConnect)
         }
     }
     
-    //demo中setting界面显示的log信息，客户开发到后期，APP稳定后可以不集成该功能，且上架最好关闭log保存功能。(客户发送iTunes中的日志文件“TelinkSDKDebugLogData”给泰凌微即可)
-    [SigLogger.share setSDKLogLevel:SigLogLevelDebug];
-    //    [SigLogger.share setSDKLogLevel:SigLogLevelAll];
-    
     /*初始化SDK*/
     //1.一个provisioner分配的地址范围，默认为0x400。
     SigDataSource.share.defaultAllocatedUnicastRangeHighAddress = kAllocatedUnicastRangeHighAddress;
@@ -119,7 +144,7 @@ RCT_EXTERN_METHOD(autoConnect)
     
     SigMeshLib.share.transmissionTimerInteral = 0.600;
     
-    //    SigDataSource.share.needPublishTimeModel = NO;
+    // SigDataSource.share.needPublishTimeModel = NO;
     
 #if DEBUG
     [SigLogger.share setSDKLogLevel:SigLogLevelDebug];
@@ -148,7 +173,8 @@ RCT_EXTERN_METHOD(autoConnect)
         EVENT_RESET_NODE_FAILED,
         EVENT_MESH_CONNECT_SUCCESS,
         EVENT_MESH_CONNECT_FAILED,
-        EVENT_DEVICE_RESPONSE
+        EVENT_DEVICE_RESPONSE,
+        EVENT_BLE_SDK_BUSY,
     ];
 }
 
@@ -248,9 +274,23 @@ RCT_EXTERN_METHOD(autoConnect)
 }
 
 
-- (void)setLuminance:(nonnull NSNumber*)address luminance:(nonnull NSNumber*)luminance
+- (void)setLuminance:(nonnull NSNumber*)address withLuminance:(nonnull NSNumber*)luminance
 {
-    [DemoCommand changeBrightnessWithBrightness100:[luminance unsignedIntValue] address:[address unsignedShortValue] retryCount:0 responseMaxCount:0 ack:true successCallback:^(UInt16 source, UInt16 destination, SigLightLightnessStatus * _Nonnull responseMessage) {
+    [DemoCommand changeBrightnessWithBrightness100:[luminance unsignedIntValue] address:[address unsignedShortValue] retryCount:SigDataSource.share.defaultRetryCount responseMaxCount:1 ack:YES successCallback:^(UInt16 source, UInt16 destination, SigLightLightnessStatus * _Nonnull responseMessage) {
+        //
+    } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
+}
+
+- (void)setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature
+{
+    if ([self isBusy]) {
+        return;
+    }
+    UInt16 temp = [SigHelper.share getUint16TemperatureFromUInt8Temperature100:[temperature unsignedIntValue]];
+    [SDKLibCommand lightCTLTemperatureSetWithDestination:[address unsignedShortValue] temperature:temp deltaUV:0 retryCount:0 responseMaxCount:1
+                                                     ack:YES successCallback:^(UInt16 source, UInt16 destination, SigLightCTLTemperatureStatus * _Nonnull responseMessage) {
         //
     } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
         //
@@ -269,27 +309,12 @@ RCT_EXTERN_METHOD(autoConnect)
      HSLSaturation:s
      retryCount:SigDataSource.share.defaultRetryCount
      responseMaxCount:1
-     ack:true
+     ack:YES
      successCallback:^(UInt16 source, UInt16 destination, SigLightHSLStatus * _Nonnull responseMessage) {
         //
     } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
         //
     }];
-}
-
-- (void)setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature
-{
-    [DemoCommand
-     changeTempratureWithTemprature100:[temperature unsignedIntValue]
-     address:[address unsignedShortValue]
-     retryCount:0
-     responseMaxCount:0
-     ack:true
-     successCallback:^(UInt16 source, UInt16 destination, SigLightCTLTemperatureStatus * _Nonnull responseMessage) {
-        // TODO: Emit to JS
-     } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
-        // TODO: Emit error
-     }];
 }
 
 - (void)autoConnect
@@ -394,11 +419,14 @@ RCT_EXTERN_METHOD(autoConnect)
             @"deviceKey": [model deviceKey],
             @"isKeyBindSuccess": [NSNumber numberWithBool:[model isKeyBindSuccess]],
             @"address": [model macAddress],
-            @"cid": [model cid],
-            @"pid": [model pid],
+            @"cidDesc": [model cid],
+            @"pidDesc": [model pid],
             @"defaultTTL": [NSNumber numberWithInteger:[model defaultTTL]],
             @"crpl": [model crpl],
             @"security": [model security],
+            @"lum": [NSNumber numberWithUnsignedShort:[model brightness]],
+            @"temp": [NSNumber numberWithShort:[model temperature]],
+            @"elementCnt": [NSNumber numberWithUnsignedInt:[model getElementCount]],
         }];
     }
     resolve(arr);
@@ -406,9 +434,14 @@ RCT_EXTERN_METHOD(autoConnect)
 
 - (void)kickOut:(nonnull NSNumber*)address
 {
-    [DemoCommand kickoutDevice:[address unsignedShortValue] retryCount:0 responseMaxCount:0 successCallback:^(UInt16 source, UInt16 destination, SigConfigNodeResetStatus * _Nonnull responseMessage) {
+    [DemoCommand
+     kickoutDevice:[address unsignedShortValue]
+     retryCount:SigDataSource.share.defaultRetryCount
+     responseMaxCount:1
+     successCallback:^(UInt16 source, UInt16 destination, SigConfigNodeResetStatus * _Nonnull responseMessage) {
         [SigDataSource.share deleteNodeFromMeshNetworkWithDeviceAddress:[address unsignedShortValue]];
-    } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
         if (isResponseAll) {
             TeLogDebug(@"kickout success.");
             [self sendEventWithName:EVENT_RESET_NODE_SUCCESS body:address];
@@ -427,6 +460,62 @@ RCT_EXTERN_METHOD(autoConnect)
 - (void)resetBle
 {
     [SigDataSource.share deleteAllSigOOBModel];
+}
+
+- (void)addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+{
+    
+}
+
+- (void)removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+{
+    
+}
+
+- (void)setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
+{
+    [DemoCommand
+     saveSceneWithAddress:[deviceId unsignedShortValue]
+     sceneId:[sceneId unsignedShortValue]
+     responseMaxCount:1
+     ack:YES
+     successCallback:^(UInt16 source, UInt16 destination, SigSceneRegisterStatus * _Nonnull responseMessage) {
+        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
+}
+
+- (void)removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId
+{
+    [DemoCommand
+     delSceneWithAddress:[deviceId unsignedShortValue]
+     sceneId:[sceneId unsignedShortValue]
+     responseMaxCount:1
+     ack:YES
+     successCallback:^(UInt16 source, UInt16 destination, SigSceneRegisterStatus * _Nonnull responseMessage) {
+        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
+}
+
+- (void)triggerScene:(nonnull NSNumber*)sceneId
+{
+    [SDKLibCommand
+     sceneRecallWithDestination:0xFFFF
+     sceneNumber:[sceneId unsignedShortValue]
+     retryCount:0
+     responseMaxCount:0
+     ack:YES
+     successCallback:^(UInt16 source, UInt16 destination, SigSceneStatus * _Nonnull responseMessage) {
+        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
 }
 
 @end
