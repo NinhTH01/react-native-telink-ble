@@ -47,15 +47,9 @@ class TelinkBleModule :
 
   var sceneList: List<Scene>? = null
 
-  private var deleteIndex = 0
-
-  private var tarScene: Scene? = null
-
   private var mHandler: Handler? = null
 
   private var deviceInfo: NodeInfo? = null
-
-  private val allGroups: List<GroupInfo>? = null
 
   private var selectedAdrList: ArrayList<SettingModel>? = null
 
@@ -186,7 +180,14 @@ class TelinkBleModule :
       eventEmitter.emit(EVENT_SET_GROUP_FAILED, true)
       return
     }
-    val groupingMessage: MeshMessage = ModelSubscriptionSetMessage.getSimple(deviceAddress, opType, eleAdr, groupAddress, models[modelIndex].modelId, true)
+    val groupingMessage: MeshMessage = ModelSubscriptionSetMessage.getSimple(
+      deviceAddress,
+      opType,
+      eleAdr,
+      groupAddress,
+      models[modelIndex].modelId,
+      true
+    )
     if (!MeshService.getInstance().sendMeshMessage(groupingMessage)) {
       eventEmitter.emit(EVENT_SET_GROUP_FAILED, true)
     } else {
@@ -243,28 +244,32 @@ class TelinkBleModule :
       if (adr == -1) {
       }
 
-       var settingModel =  SettingModel(adr, true)
+      var settingModel = SettingModel(adr, true)
 
       val appKeyIndex: Int = application!!.getMeshInfo().getDefaultAppKeyIndex()
 
       val meshMessage: MeshMessage
       meshMessage = if (settingModel.add) {
-        SceneStoreMessage.getSimple(settingModel.address,
+        SceneStoreMessage.getSimple(
+          settingModel.address,
           appKeyIndex,
           scene!!.id,
-          true, 1)
+          true, 1
+        )
       } else {
-        SceneDeleteMessage.getSimple(settingModel.address,
+        SceneDeleteMessage.getSimple(
+          settingModel.address,
           appKeyIndex,
           scene!!.id,
-          true, 1)
+          true, 1
+        )
       }
       if (MeshService.getInstance().sendMeshMessage(meshMessage)) {
         application!!.getMeshInfo().scenes.add(scene!!)
         application!!.getMeshInfo().saveOrUpdate(context)
         if (end) {
           eventEmitter.emit(EVENT_SET_SCENE_SUCCESS, scene!!.id)
-        }  else {
+        } else {
           eventEmitter.emit(EVENT_SET_SCENE_SUCCESS, deviceIndex)
         }
       } else {
@@ -288,7 +293,7 @@ class TelinkBleModule :
           it.meshAddress == deviceInfo!!.getInt("unicastId")
         }
 
-         var state: Scene.SceneState? = Scene.SceneState()
+        var state: Scene.SceneState? = Scene.SceneState()
         if (node != null) {
           state?.address = node.meshAddress
           state?.onOff = node.getOnOff()
@@ -337,15 +342,19 @@ class TelinkBleModule :
     }
     val meshMessage: MeshMessage
     meshMessage = if (model.add) {
-      SceneStoreMessage.getSimple(model.address,
+      SceneStoreMessage.getSimple(
+        model.address,
         appKeyIndex,
         scene!!.id,
-        true, 1)
+        true, 1
+      )
     } else {
-      SceneDeleteMessage.getSimple(model.address,
+      SceneDeleteMessage.getSimple(
+        model.address,
         appKeyIndex,
         scene!!.id,
-        true, 1)
+        true, 1
+      )
     }
     if (MeshService.getInstance().sendMeshMessage(meshMessage)) {
       eventEmitter.emit(EVENT_SET_SCENE_SUCCESS, scene!!.id)
@@ -365,8 +374,10 @@ class TelinkBleModule :
   fun onStartScene(sceneId: Int) {
 //                MeshService.getInstance().cmdSceneRecall(0xFFFF, 0, sceneList.get(position).id, 0, null);
     val appKeyIndex: Int = application!!.getMeshInfo().getDefaultAppKeyIndex()
-    val recallMessage = SceneRecallMessage.getSimple(0xFFFF,
-      appKeyIndex, sceneId, false, 0)
+    val recallMessage = SceneRecallMessage.getSimple(
+      0xFFFF,
+      appKeyIndex, sceneId, false, 0
+    )
     MeshService.getInstance().sendMeshMessage(recallMessage)
   }
 
@@ -376,22 +387,25 @@ class TelinkBleModule :
 
   @ReactMethod
   private fun deleteScene(sceneId: Int) {
-     sceneList = application!!.getMeshInfo().scenes
+    sceneList = application!!.getMeshInfo().scenes
     var success: Boolean? = null
     val sceneTaget = application!!.getMeshInfo().scenes?.find { it.id == sceneId }
     if (sceneTaget != null) {
       for (sta in sceneTaget?.states) {
-        val deviceInfo: NodeInfo? = application!!.getMeshInfo().getDeviceByMeshAddress(sta?.address!!)
+        val deviceInfo: NodeInfo? =
+          application!!.getMeshInfo().getDeviceByMeshAddress(sta?.address!!)
         if (deviceInfo != null && sceneTaget.id == sceneId) {
           if (deviceInfo.getOnOff() === -1) {
           } else {
             val eleAdr = deviceInfo?.getTargetEleAdr(MeshSigModel.SIG_MD_SCENE_S.modelId)
             val appKeyIndex: Int = application!!.getMeshInfo().getDefaultAppKeyIndex()
             val deleteMessage = eleAdr?.let {
-              SceneDeleteMessage.getSimple(it,
+              SceneDeleteMessage.getSimple(
+                it,
                 appKeyIndex,
                 sceneTaget!!.id,
-                true, 1)
+                true, 1
+              )
             }
             success = MeshService.getInstance().sendMeshMessage(deleteMessage)
           }

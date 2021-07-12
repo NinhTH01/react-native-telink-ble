@@ -44,6 +44,7 @@ open class BleActivity : ReactActivity(), EventListener<String?>, MeshAutoConnec
     resetNodeState()
     TelinkBleModule.setApplication(app!!)
     TelinkBleModule.getInstance()?.setHandler(Handler())
+    TelinkBleModule.getInstance()?.autoConnect()
   }
 
   override fun onDestroy() {
