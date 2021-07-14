@@ -141,6 +141,8 @@ Start device scanning.
 
 **`stopScanning(): void`**
 
+Stop device scanning (Android only)
+
 ---
 
 **`setHsl(unicastId: number, hsl: {h: number; s: number; l: number}): void`**
@@ -188,12 +190,6 @@ Set temperature (CTL) for device: temp value in range 0..100
 **`kickOut(unicastId: number): void`**
 
 Reset a node with address: `unicastId`
-
----
-
-**`forceRemoveNodeAtAddress(unicastId: number): void`**
-
-Force remove node at address `unicastId`, even when reset processing failed
 
 ## Contributing
 
