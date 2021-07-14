@@ -6,6 +6,12 @@ module.exports = {
   plugins: [
     ['macros'],
     [
+      '@babel/plugin-proposal-decorators',
+      {
+        legacy: true,
+      },
+    ],
+    [
       'module-resolver',
       {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],

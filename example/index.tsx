@@ -3,23 +3,20 @@ import type { FC, LazyExoticComponent } from 'react';
 import React, { Suspense } from 'react';
 import { AppRegistry, Platform } from 'react-native';
 import 'react-native-gesture-handler';
-import { Provider as PaperProvider } from 'react-native-paper';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import 'react-native-telink-ble';
+import TelinkBle from 'react-native-telink-ble';
 import { name as appName } from './app.json';
-import { appStorage } from './src/app/app-storage';
 import { globalState } from './src/app/global-state';
 import { showError } from './src/helpers/toast';
-import TelinkBle from 'react-native-telink-ble';
 
 enableScreens();
 
 const App: LazyExoticComponent<FC> = React.lazy(async () => {
   TelinkBle.startMeshSDK();
 
-  await appStorage.initialize();
   await globalState.initialize();
 
   if (__DEV__) {
@@ -47,15 +44,13 @@ const App: LazyExoticComponent<FC> = React.lazy(async () => {
 
 function AppEntry() {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <SafeAreaProvider>
-          <Suspense fallback={null}>
-            <App />
-          </Suspense>
-        </SafeAreaProvider>
-      </NavigationContainer>
-    </PaperProvider>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <Suspense fallback={null}>
+          <App />
+        </Suspense>
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 }
 

@@ -5,25 +5,18 @@ import {
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
-  View,
 } from 'react-native';
-import { Button } from 'react-native-paper';
 import type { NodeInfo } from 'react-native-telink-ble';
 import TelinkBle from 'react-native-telink-ble';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface NodeViewProps extends TouchableOpacityProps {
   node: NodeInfo;
 
   index: number;
-
-  isSwitch: boolean;
-
-  selected?: boolean;
 }
 
 export default function NodeView(props: NodeViewProps) {
-  const { node, isSwitch, selected, ...restProps } = props;
+  const { node, ...restProps } = props;
 
   const [onOff, setOnOff] = React.useState<boolean>(false);
 
@@ -36,62 +29,18 @@ export default function NodeView(props: NodeViewProps) {
   );
 
   return (
-    <TouchableOpacity
-      style={[styles.container, selected && styles.borderSelect]}
-      {...restProps}
-    >
-      <View style={styles.head}>
-        <MaterialIcons name="laptop" size={20} style={styles.icon} />
-        <Text>MAC</Text>
-      </View>
-      <Text>{node.address}</Text>
-
-      <View style={styles.deviceInfo}>
-        <MaterialIcons name="tag" size={20} style={styles.icon} />
-        <Text>UUID</Text>
-      </View>
-      <Text>{node.uuid}</Text>
-
-      <View style={styles.deviceInfo}>
-        <MaterialIcons name="tag" size={20} style={styles.icon} />
-        <Text>Unicast ID</Text>
-      </View>
+    <TouchableOpacity style={[styles.container]} {...restProps}>
       <Text>{node.unicastId}</Text>
-      {isSwitch && <Switch value={onOff} onValueChange={handleOnOff} />}
-      <Button
-        onPress={() => {
-          TelinkBle.kickOut(node.unicastId);
-        }}
-      >
-        Kick out
-      </Button>
-      <Button
-        onPress={() => {
-          TelinkBle.setSceneForDevice(2, node.unicastId);
-        }}
-      >
-        Set scene
-      </Button>
-      <Button
-        onPress={() => {
-          TelinkBle.triggerScene(2);
-        }}
-      >
-        Trigger scene
-      </Button>
-      <Button
-        onPress={() => {
-          TelinkBle.removeSceneFromDevice(2, node.unicastId);
-        }}
-      >
-        Remove scene
-      </Button>
+      <Switch value={onOff} onValueChange={handleOnOff} />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginLeft: 16,
     marginRight: 16,
     marginTop: 8,
@@ -111,24 +60,5 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
     overflow: 'hidden',
-  },
-  head: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-    marginBottom: 4,
-  },
-  icon: {
-    marginRight: 12,
-  },
-  deviceInfo: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    marginTop: 4,
-    marginBottom: 4,
-  },
-  borderSelect: {
-    borderColor: 'green',
-    borderWidth: 2,
   },
 });

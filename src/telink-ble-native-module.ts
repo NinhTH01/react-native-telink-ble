@@ -1,6 +1,4 @@
-import type { BluetoothState } from './bluetooth-state';
 import type { HSL } from 'colorsys';
-import type { NodeInfo } from './node-info';
 
 export interface TelinkBleNativeModule {
   /**
@@ -14,19 +12,9 @@ export interface TelinkBleNativeModule {
   stopScanning(): void;
 
   /**
-   * Initialize mesh network with existing key
-   */
-  initMeshService(): void;
-
-  /**
-   * Check bluetooth state
-   *
-   * @return {Promise<BluetoothState>}
-   */
-  checkBluetoothPermission(): Promise<BluetoothState>;
-
-  /**
    * Start provisioning a device
+   *
+   * (Android only)
    *
    * @param deviceUUID {string} - device UUID in hex string
    * @return {Promise<number>} - Unicast ID of device in mesh network
@@ -44,7 +32,6 @@ export interface TelinkBleNativeModule {
   autoConnect(): void;
 
   /**
-   *
    * @param address {number} - Device mesh address
    * @param onOff {0 | 1} - Device status
    */
@@ -107,37 +94,8 @@ export interface TelinkBleNativeModule {
    *
    * @param sceneId {number} - Scene Id
    * @param deviceId {number} - Device mesh address
-   * @param end
-   * @param deviceIndex
    */
-  setSceneForDevice(
-    sceneId: number,
-    deviceId: number,
-    end: boolean,
-    deviceIndex: string
-  ): void;
-
-  /**
-   * Add device list to scene
-   *
-   * @param sceneId {number} - Scene Id
-   * @param nodeList
-   */
-  setSceneForListDevice(sceneId: number, nodeList: NodeInfo[]): void;
-
-  /**
-   * Control scene
-   *
-   * @param sceneId {number} - Scene Id
-   */
-  onStartScene(sceneId: number): void;
-
-  /**
-   * Delete scene
-   *
-   * @param sceneId {number} - Scene Id
-   */
-  deleteScene(sceneId: number): void;
+  setSceneForDevice(sceneId: number, deviceId: number): void;
 
   /**
    * Unsubscribe a scene
@@ -151,8 +109,9 @@ export interface TelinkBleNativeModule {
    * Trigger a scene
    *
    * @param sceneId {number} - Scene ID
+   * @param numNodes {number} - Number of nodes
    */
-  triggerScene(sceneId: number): void;
+  triggerScene(sceneId: number, numNodes: number): void;
 
   /**
    * Set scene for a scene controller button
@@ -169,20 +128,6 @@ export interface TelinkBleNativeModule {
    * @param deviceId {number} - Mesh address
    */
   kickOut(deviceId: number): void;
-
-  /**
-   * Reset BLE network
-   *
-   * @return {void}
-   */
-  resetBle(): void;
-
-  /**
-   * Force remove node
-   *
-   * @param address {number} - Device unicast ID
-   */
-  forceRemoveNodeAtAddress(address: number): void;
 
   /**
    * Start mesh SDK

@@ -11,28 +11,34 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
-#import <TelinkSigMeshLib/SigModel.h>
+#import <TelinkSigMeshLib/TelinkSigMeshLib.h>
 
-#define EVENT_DEVICE_FOUND          @"EVENT_DEVICE_FOUND"
-#define EVENT_SCANNING_TIMEOUT      @"EVENT_SCANNING_TIMEOUT"
-#define EVENT_PROVISIONING_START    @"EVENT_PROVISIONING_START"
-#define EVENT_PROVISIONING_SUCCESS  @"EVENT_PROVISIONING_SUCCESS"
-#define EVENT_PROVISIONING_FAILED   @"EVENT_PROVISIONING_FAILED"
-#define EVENT_BINDING_START         @"EVENT_BINDING_START"
-#define EVENT_BINDING_SUCCESS       @"EVENT_BINDING_SUCCESS"
-#define EVENT_BINDING_FAILED        @"EVENT_BINDING_FAILED"
-#define EVENT_SET_GROUP_SUCCESS     @"EVENT_SET_GROUP_SUCCESS"
-#define EVENT_SET_GROUP_FAILED      @"EVENT_SET_GROUP_FAILED"
-#define EVENT_SET_SCENE_SUCCESS     @"EVENT_SET_SCENE_SUCCESS"
-#define EVENT_SET_SCENE_FAILED      @"EVENT_SET_SCENE_FAILED"
-#define EVENT_SET_TRIGGER_SUCCESS   @"EVENT_SET_TRIGGER_SUCCESS"
-#define EVENT_SET_TRIGGER_FAILED    @"EVENT_SET_TRIGGER_FAILED"
-#define EVENT_RESET_NODE_SUCCESS    @"EVENT_RESET_NODE_SUCCESS"
-#define EVENT_RESET_NODE_FAILED     @"EVENT_RESET_NODE_FAILED"
-#define EVENT_MESH_CONNECT_SUCCESS  @"EVENT_MESH_CONNECT_SUCCESS"
-#define EVENT_MESH_CONNECT_FAILED   @"EVENT_MESH_CONNECT_FAILED"
-#define EVENT_DEVICE_RESPONSE       @"EVENT_DEVICE_RESPONSE"
-#define EVENT_BLE_SDK_BUSY          @"EVENT_BLE_SDK_BUSY"
+#define EVENT_DEVICE_FOUND              @"EVENT_DEVICE_FOUND"
+#define EVENT_SCANNING_TIMEOUT          @"EVENT_SCANNING_TIMEOUT"
+#define EVENT_PROVISIONING_START        @"EVENT_PROVISIONING_START"
+#define EVENT_PROVISIONING_SUCCESS      @"EVENT_PROVISIONING_SUCCESS"
+#define EVENT_PROVISIONING_FAILED       @"EVENT_PROVISIONING_FAILED"
+#define EVENT_BINDING_START             @"EVENT_BINDING_START"
+#define EVENT_BINDING_SUCCESS           @"EVENT_BINDING_SUCCESS"
+#define EVENT_BINDING_FAILED            @"EVENT_BINDING_FAILED"
+#define EVENT_SET_GROUP_SUCCESS         @"EVENT_SET_GROUP_SUCCESS"
+#define EVENT_SET_GROUP_FAILED          @"EVENT_SET_GROUP_FAILED"
+#define EVENT_SET_SCENE_SUCCESS         @"EVENT_SET_SCENE_SUCCESS"
+#define EVENT_SET_SCENE_FAILED          @"EVENT_SET_SCENE_FAILED"
+#define EVENT_SET_TRIGGER_SUCCESS       @"EVENT_SET_TRIGGER_SUCCESS"
+#define EVENT_SET_TRIGGER_FAILED        @"EVENT_SET_TRIGGER_FAILED"
+#define EVENT_RESET_NODE_SUCCESS        @"EVENT_RESET_NODE_SUCCESS"
+#define EVENT_RESET_NODE_FAILED         @"EVENT_RESET_NODE_FAILED"
+#define EVENT_MESH_CONNECT_SUCCESS      @"EVENT_MESH_CONNECT_SUCCESS"
+#define EVENT_MESH_CONNECT_FAILED       @"EVENT_MESH_CONNECT_FAILED"
+#define EVENT_DEVICE_RESPONSE           @"EVENT_DEVICE_RESPONSE"
+#define EVENT_BLE_SDK_BUSY              @"EVENT_BLE_SDK_BUSY"
+#define EVENT_REMOVE_SCENE_SUCCESS      @"EVENT_REMOVE_SCENE_SUCCESS"
+#define EVENT_REMOVE_SCENE_FAIL         @"EVENT_REMOVE_SCENE_FAIL"
+#define EVENT_DEVICE_ON_OFF_STATUS      @"EVENT_DEVICE_ON_OFF_STATUS"
+#define EVENT_DEVICE_LIGHTNESS          @"EVENT_DEVICE_LIGHTNESS"
+#define EVENT_DEVICE_CTL                @"EVENT_DEVICE_CTL"
+#define EVENT_DEVICE_HSL                @"EVENT_DEVICE_HSL"
 
 #define kShareWithBluetoothPointToPoint (YES)
 #define kShowScenes                     (YES)
@@ -51,11 +57,11 @@
 #define KeyBindType                         @"kKeyBindType"
 #define kDLEUnsegmentLength                 (229)
 
-@interface TelinkBle : RCTEventEmitter<RCTBridgeModule>
+@interface TelinkBle : RCTEventEmitter <RCTBridgeModule, SigMessageDelegate>
 
-@property (strong, nonatomic) NSMutableArray<AddDeviceModel*> * _Nonnull source;
+@property(strong, nonatomic) NSMutableArray<AddDeviceModel *> *_Nonnull source;
 
-- (BOOL)isBusy;
++ (void)startMeshSDK;
 
 - (void)startMeshSDK;
 
@@ -73,11 +79,11 @@
 
 - (void)setAllOff;
 
-- (void)setLuminance:(nonnull NSNumber*)address withLuminance:(nonnull NSNumber*)luminance;
+- (void)setLuminance:(nonnull NSNumber *)address withLuminance:(nonnull NSNumber *)luminance;
 
-- (void)setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature;
+- (void)setTemp:(nonnull NSNumber *)address withTemp:(nonnull NSNumber *)temperature;
 
-- (void)setHsl:(nonnull NSNumber*)address withHSL:(nonnull NSDictionary*)hsl;
+- (void)setHsl:(nonnull NSNumber *)address withHSL:(nonnull NSDictionary *)hsl;
 
 - (void)autoConnect;
 
@@ -85,23 +91,19 @@
 
 - (void)startScanning;
 
-- (void)getNodes:(RCTPromiseResolveBlock _Nonnull )resolve withRejecter:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)getNodes:(RCTPromiseResolveBlock _Nonnull)resolve withRejecter:(RCTPromiseRejectBlock _Nonnull)reject;
 
-- (void)kickOut:(nonnull NSNumber*)address;
+- (void)kickOut:(nonnull NSNumber *)address;
 
-- (void)forceRemoveNodeAtAddress:(nonnull NSNumber*)address;
+- (void)addDeviceToGroup:(nonnull NSNumber *)groupId withDeviceId:(nonnull NSNumber *)deviceId;
 
-- (void)resetBle;
+- (void)removeDeviceFromGroup:(nonnull NSNumber *)groupId withDeviceId:(nonnull NSNumber *)deviceId;
 
-- (void)addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+- (void)setSceneForDevice:(nonnull NSNumber *)sceneId withDeviceId:(nonnull NSNumber *)deviceId;
 
-- (void)removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+- (void)removeSceneFromDevice:(nonnull NSNumber *)sceneId withDeviceId:(nonnull NSNumber *)deviceId;
 
-- (void)setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
-
-- (void)removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
-
-- (void)triggerScene:(nonnull NSNumber*)sceneId;
+- (void)triggerScene:(nonnull NSNumber *)sceneId withRetryCount:(nonnull NSNumber *)retryCount;
 
 @end
 

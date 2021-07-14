@@ -1,7 +1,7 @@
 import type { StackScreenProps } from '@react-navigation/stack';
 import React, { FC, Reducer } from 'react';
 import { FlatList, ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Button } from 'react-native-paper';
 import TelinkBle, { Device } from 'react-native-telink-ble';
 import nameof from 'ts-nameof.macro';
 import DeviceView from '../components/DeviceView';
@@ -53,33 +53,43 @@ export const DeviceScanningScreen: FC<StackScreenProps<any>> = (
   }, []);
 
   return (
-    <FlatList
-      contentContainerStyle={styles.listContent}
-      ListHeaderComponent={
-        <>
-          {scanning && (
-            <View style={styles.indicatorContainer}>
-              <Button onPress={handleStopScanning}>Stop scanning</Button>
-              <ActivityIndicator />
-            </View>
-          )}
-          {!scanning && (
-            <View style={styles.indicatorContainer}>
-              <Button onPress={handleStartScanning}>Start scanning</Button>
-            </View>
-          )}
-        </>
-      }
-      data={devices}
-      keyExtractor={(device: Device) => device.address}
-      renderItem={({ item, index }: ListRenderItemInfo<Device>) => {
-        return (
-          <React.Fragment key={item.address}>
-            <DeviceView device={item} index={index} />
-          </React.Fragment>
-        );
-      }}
-    />
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation?.goBack();
+          }}
+        />
+        <Appbar.Content title={DeviceScanningScreen.displayName} />
+      </Appbar.Header>
+      <FlatList
+        contentContainerStyle={styles.listContent}
+        ListHeaderComponent={
+          <>
+            {scanning && (
+              <View style={styles.indicatorContainer}>
+                <Button onPress={handleStopScanning}>Stop scanning</Button>
+                <ActivityIndicator />
+              </View>
+            )}
+            {!scanning && (
+              <View style={styles.indicatorContainer}>
+                <Button onPress={handleStartScanning}>Start scanning</Button>
+              </View>
+            )}
+          </>
+        }
+        data={devices}
+        keyExtractor={(device: Device) => device.address}
+        renderItem={({ item, index }: ListRenderItemInfo<Device>) => {
+          return (
+            <React.Fragment key={item.address}>
+              <DeviceView device={item} index={index} />
+            </React.Fragment>
+          );
+        }}
+      />
+    </>
   );
 };
 

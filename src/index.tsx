@@ -1,7 +1,6 @@
 import type { HSL } from 'colorsys';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import { BleEvent } from './ble-event';
-import type { BluetoothState } from './bluetooth-state';
 import type { BoundDevice } from './bound-device';
 import { NATIVE_MODULE_NAME } from './config';
 import type { Device } from './device';
@@ -38,14 +37,6 @@ export class TelinkBle implements TelinkBleNativeModule {
     return TelinkBleModule.stopScanning();
   }
 
-  public initMeshService() {
-    TelinkBleModule.initMeshService();
-  }
-
-  public checkBluetoothPermission(): Promise<BluetoothState> {
-    return TelinkBleModule.checkBluetoothPermission();
-  }
-
   public startProvisioning(deviceUUID: string): Promise<number> {
     return TelinkBleModule.startProvisioning(deviceUUID);
   }
@@ -78,33 +69,16 @@ export class TelinkBle implements TelinkBleNativeModule {
     TelinkBleModule.removeDeviceFromGroup(groupId, deviceId);
   }
 
-  public setSceneForDevice(
-    sceneId: number,
-    deviceId: number,
-    end: boolean,
-    deviceIndex: string
-  ): void {
-    TelinkBleModule.setSceneForDevice(sceneId, deviceId, end, deviceIndex);
-  }
-
-  public setSceneForListDevice(sceneId: number, nodeList: NodeInfo[]): void {
-    TelinkBleModule.setSceneForListDevice(sceneId, nodeList);
-  }
-
-  public onStartScene(sceneId: number): void {
-    TelinkBleModule.onStartScene(sceneId);
-  }
-
-  public deleteScene(sceneId: number): void {
-    TelinkBleModule.deleteScene(sceneId);
+  public setSceneForDevice(sceneId: number, deviceId: number): void {
+    TelinkBleModule.setSceneForDevice(sceneId, deviceId);
   }
 
   public removeSceneFromDevice(sceneId: number, deviceId: number): void {
     TelinkBleModule.removeSceneFromDevice(sceneId, deviceId);
   }
 
-  public triggerScene(sceneId: number): void {
-    TelinkBleModule.triggerScene(sceneId);
+  public triggerScene(sceneId: number, numNodes: number): void {
+    TelinkBleModule.triggerScene(sceneId, numNodes);
   }
 
   public setSceneForController(
@@ -115,16 +89,8 @@ export class TelinkBle implements TelinkBleNativeModule {
     TelinkBleModule.setSceneForController(deviceId, mode, sceneId);
   }
 
-  public resetBle(): void {
-    TelinkBleModule.resetBle();
-  }
-
   public kickOut(deviceId: number): void {
     TelinkBleModule.kickOut(deviceId);
-  }
-
-  public forceRemoveNodeAtAddress(address: number): void {
-    TelinkBleModule.forceRemoveNodeAtAddress(address);
   }
 
   public startMeshSDK(): void {

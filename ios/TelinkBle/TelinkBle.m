@@ -43,23 +43,16 @@ RCT_EXTERN_METHOD(setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*
 
 RCT_EXTERN_METHOD(autoConnect)
 
-RCT_EXTERN_METHOD(setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId)
-
 RCT_EXTERN_METHOD(removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId)
 
-RCT_EXTERN_METHOD(triggerScene:(nonnull NSNumber*)sceneId)
+RCT_EXTERN_METHOD(triggerScene:(nonnull NSNumber*)sceneId withRetryCount:(nonnull NSNumber*)retryCount)
 
-RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
-{
-    
-}
+RCT_EXTERN_METHOD(addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId)
 
-- (BOOL)isBusy
-{
-    return SigMeshLib.share.isBusyNow;
-}
+RCT_EXTERN_METHOD(removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId)
 
-- (void)startMeshSDK
+#pragma mark - class startMeshSDK
++ (void)startMeshSDK
 {
     //demo v2.8.0新增快速添加模式，demo默认使用普通添加模式。
     NSNumber *type = [[NSUserDefaults standardUserDefaults] valueForKey:kKeyBindType];
@@ -68,7 +61,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         [[NSUserDefaults standardUserDefaults] setValue:type forKey:kKeyBindType];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
     //demo v2.8.0新增remote添加模式，demo默认使用普通添加模式。
     NSNumber *remoteType = [[NSUserDefaults standardUserDefaults] valueForKey:kRemoteAddType];
     if (remoteType == nil) {
@@ -76,7 +68,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         [[NSUserDefaults standardUserDefaults] setValue:remoteType forKey:kRemoteAddType];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
     //demo v2.8.1新增私有定制getOnlinestatus，demo默认使用私有定制获取状态。
     NSNumber *onlineType = [[NSUserDefaults standardUserDefaults] valueForKey:kGetOnlineStatusType];
     if (onlineType == nil) {
@@ -84,7 +75,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         [[NSUserDefaults standardUserDefaults] setValue:onlineType forKey:kGetOnlineStatusType];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
     //demo v3.0.0新增fast provision添加模式，demo默认使用普通添加模式。
     NSNumber *fastAddType = [[NSUserDefaults standardUserDefaults] valueForKey:kFastAddType];
     if (fastAddType == nil) {
@@ -92,7 +82,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         [[NSUserDefaults standardUserDefaults] setValue:fastAddType forKey:kFastAddType];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
     //demo v3.2.2新增staticOOB设备添加的兼容模式，demo默认使用兼容模式。（兼容模式为staticOOB设备在无OOB数据的情况下通过noOOB provision的方式进行添加;不兼容模式为staticOOB设备必须通过staticOOB provision的方式进行添加）。
     NSNumber *addStaticOOBDevcieByNoOOBEnable = [[NSUserDefaults standardUserDefaults] valueForKey:kAddStaticOOBDevcieByNoOOBEnable];
     if (addStaticOOBDevcieByNoOOBEnable == nil) {
@@ -101,7 +90,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     SigDataSource.share.addStaticOOBDevcieByNoOOBEnable = addStaticOOBDevcieByNoOOBEnable.boolValue;
-    
     //demo v3.3.0新增DLE模式，demo默认关闭DLE模式。（客户定制功能）
     NSNumber *DLEType = [[NSUserDefaults standardUserDefaults] valueForKey:kDLEType];
     if (DLEType == nil) {
@@ -114,7 +102,6 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
             SigDataSource.share.defaultUnsegmentedMessageLowerTransportPDUMaxLength = kDLEUnsegmentLength;
         }
     }
-    
     /*初始化SDK*/
     //1.一个provisioner分配的地址范围，默认为0x400。
     SigDataSource.share.defaultAllocatedUnicastRangeHighAddress = kAllocatedUnicastRangeHighAddress;
@@ -123,34 +110,79 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     SigDataSource.share.defaultSnoIncrement = 16;
     //3.启动SDK。
     [SDKLibCommand startMeshSDK];
-    
     //(可选)SDK的分组默认绑定5个modelID，可通过以下接口修改分组默认绑定的modelIDs
     SigDataSource.share.defaultGroupSubscriptionModels = [NSMutableArray arrayWithArray:@[@(kSigModel_GenericOnOffServer_ID),@(kSigModel_LightLightnessServer_ID),@(kSigModel_LightCTLServer_ID),@(kSigModel_LightCTLTemperatureServer_ID),@(kSigModel_LightHSLServer_ID)]];
-    //    [SigDataSource.share.defaultGroupSubscriptionModels addObject:@(0x00000211)];//新增vendorModelID用于测试加组及vendor组控。
-    
-    //(可选)SDK默认实现了PID为1和7的设备的fast bind功能，其它类型的设备可通过以下接口添加该类型设备默认的nodeInfo以实现fast bind功能
-    //    DeviceTypeModel *model = [[DeviceTypeModel alloc] initWithCID:kCompanyID PID:8];
-    //    NSData *nodeInfoData = [NSData dataWithBytes:TemByte length:76];
-    //    [model setDefultNodeInfoData:nodeInfoData];
-    //    [SigDataSource.share.defaultNodeInfos addObject:model];
-    
-    //(可选)SDK默认publish周期为20秒，通过修改可以修改SDK的默认publish参数，或者客户自行实现publish检测机制。
-    //    SigPeriodModel *periodModel = [[SigPeriodModel alloc] init];
-    //    periodModel.numberOfSteps = kPublishIntervalOfDemo;
-    ////    periodModel.numberOfSteps = 5;//整形，范围0x01~0x3F.
-    //    periodModel.resolution = [LibTools getSigStepResolutionInMillisecondsOfJson:SigStepResolution_seconds];
-    //    SigDataSource.share.defaultPublishPeriodModel = periodModel;
-    
     
     SigMeshLib.share.transmissionTimerInteral = 0.600;
-    
     // SigDataSource.share.needPublishTimeModel = NO;
-    
 #if DEBUG
     [SigLogger.share setSDKLogLevel:SigLogLevelDebug];
 #else
     [SigLogger.share setSDKLogLevel:SigLogLevelWarning];
 #endif
+}
+
+#pragma mark - SigMessageDelegate
+- (void)didReceiveMessage:(SigMeshMessage *)message sentFromSource:(UInt16)source toDestination:(UInt16)destination {
+    if ([message isKindOfClass:[SigGenericOnOffStatus class]]) {
+        SigGenericOnOffStatus* msg = (SigGenericOnOffStatus*) message;
+        [self sendEventWithName:EVENT_DEVICE_ON_OFF_STATUS body:@{
+            @"address": [NSNumber numberWithUnsignedShort:source],
+            @"isOn": [NSNumber numberWithBool:!msg.isOn],
+        }];
+    }
+    
+    if ([message isKindOfClass:[SigTelinkOnlineStatusMessage class]]) {
+        
+    }
+    
+    if ([message isKindOfClass:[SigLightLightnessStatus class]]) {
+        [self sendEventWithName:EVENT_DEVICE_LIGHTNESS body:@{
+            @"address": [NSNumber numberWithUnsignedShort:source],
+            @"lightness": [NSNumber numberWithUnsignedShort:[SigHelper.share getUInt8LumFromUint16Lightness:[((SigLightLightnessStatus*)message) targetLightness]]],
+        }];
+    }
+    
+    if ([message isKindOfClass:[SigLightLightnessLastStatus class]]) {
+        [self sendEventWithName:EVENT_DEVICE_LIGHTNESS body:@{
+            @"address": [NSNumber numberWithUnsignedShort:source],
+            @"lightness": [NSNumber numberWithUnsignedShort:[SigHelper.share getUInt8LumFromUint16Lightness:[((SigLightLightnessLastStatus*)message) lightness]]],
+        }];
+    }
+    
+    if ([message isKindOfClass:[SigLightCTLStatus class]]) {
+        [self sendEventWithName:EVENT_DEVICE_CTL body:@{
+            @"address": [NSNumber numberWithUnsignedShort:source],
+            @"temperature": [NSNumber numberWithUnsignedShort:[SigHelper.share getUInt8Temperature100FromUint16Temperature:[((SigLightCTLStatus*)message) targetCTLTemperature]]],
+        }];
+    }
+    
+    if ([message isKindOfClass:[SigLightHSLStatus class]]) {
+        SigLightHSLStatus* msg = (SigLightHSLStatus*)message;
+        UInt8 l = [SigHelper.share getUInt8LumFromUint16Lightness:[msg HSLLightness]];
+        UInt8 s = [SigHelper.share getUInt8LumFromUint16Lightness:[msg HSLSaturation]];
+        UInt16 h = floor(((double) [msg HSLHue]) / 0xFFFF * 360);
+        [self sendEventWithName:EVENT_DEVICE_HSL body:@{
+            @"address": [NSNumber numberWithUnsignedShort:source],
+            @"h": [NSNumber numberWithDouble:h],
+            @"s": [NSNumber numberWithUnsignedInt:s],
+            @"l": [NSNumber numberWithUnsignedInt:l],
+        }];
+    }
+    
+    if ([message isKindOfClass:[SigLightXyLStatus class]]) {
+        
+    }
+    
+    if ([message isKindOfClass:[SigLightLCLightOnOffStatus class]]) {
+        
+    }
+}
+
+#pragma mark - startMeshSDK
+- (void)startMeshSDK
+{
+    [TelinkBle startMeshSDK];
 }
 
 - (NSArray<NSString *> *)supportedEvents {
@@ -175,6 +207,12 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
         EVENT_MESH_CONNECT_FAILED,
         EVENT_DEVICE_RESPONSE,
         EVENT_BLE_SDK_BUSY,
+        EVENT_REMOVE_SCENE_SUCCESS,
+        EVENT_REMOVE_SCENE_FAIL,
+        EVENT_DEVICE_ON_OFF_STATUS,
+        EVENT_DEVICE_LIGHTNESS,
+        EVENT_DEVICE_CTL,
+        EVENT_DEVICE_HSL,
     ];
 }
 
@@ -248,7 +286,7 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     });
 }
 
-
+#pragma mark - setOnOff
 - (void)setOnOff:(int)address onOff:(int)onOff
 {
     [DemoCommand switchOnOffWithIsOn:onOff address:address responseMaxCount:(int)1 ack:YES successCallback:^(UInt16 source, UInt16 destination, SigGenericOnOffStatus * _Nonnull responseMessage) {
@@ -263,40 +301,56 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     [self setOnOff:[address unsignedShortValue] onOff:[onOff intValue]];
 }
 
+#pragma mark - setAllOn
 - (void)setAllOn
 {
     [self setOnOff:kMeshAddress_allNodes onOff:1];
 }
 
+#pragma mark - setAllOff
 - (void)setAllOff
 {
     [self setOnOff:kMeshAddress_allNodes onOff:0];
 }
 
-
+#pragma mark - setLuminance
 - (void)setLuminance:(nonnull NSNumber*)address withLuminance:(nonnull NSNumber*)luminance
 {
-    [DemoCommand changeBrightnessWithBrightness100:[luminance unsignedIntValue] address:[address unsignedShortValue] retryCount:SigDataSource.share.defaultRetryCount responseMaxCount:1 ack:YES successCallback:^(UInt16 source, UInt16 destination, SigLightLightnessStatus * _Nonnull responseMessage) {
+    [DemoCommand
+     changeBrightnessWithBrightness100:[luminance unsignedIntValue]
+     address:[address unsignedShortValue]
+     retryCount:SigDataSource.share.defaultRetryCount
+     responseMaxCount:0
+     ack:YES
+     successCallback:^(UInt16 source, UInt16 destination, SigLightLightnessStatus * _Nonnull responseMessage) {
         //
-    } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
-        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        if (isResponseAll) {
+            //
+        }
     }];
 }
 
+#pragma mark - setTemp
 - (void)setTemp:(nonnull NSNumber*)address withTemp:(nonnull NSNumber*)temperature
 {
-    if ([self isBusy]) {
-        return;
-    }
-    UInt16 temp = [SigHelper.share getUint16TemperatureFromUInt8Temperature100:[temperature unsignedIntValue]];
-    [SDKLibCommand lightCTLTemperatureSetWithDestination:[address unsignedShortValue] temperature:temp deltaUV:0 retryCount:0 responseMaxCount:1
-                                                     ack:YES successCallback:^(UInt16 source, UInt16 destination, SigLightCTLTemperatureStatus * _Nonnull responseMessage) {
+    UInt8 tempValue = [temperature unsignedIntValue];
+    [DemoCommand
+     changeTempratureWithTemprature100:tempValue
+     address:[address unsignedShortValue]
+     retryCount:0
+     responseMaxCount:0
+     ack:NO
+     successCallback:^(UInt16 source, UInt16 destination, SigLightCTLTemperatureStatus * _Nonnull responseMessage) {
         //
-    } resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
         //
     }];
 }
 
+#pragma mark - setHsl
 - (void)setHsl:(nonnull NSNumber*)address withHSL:(nonnull NSDictionary*)hsl
 {
     double h = [[hsl valueForKey:@"h"] doubleValue] / 360 * 0xFFFF;
@@ -317,6 +371,7 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     }];
 }
 
+#pragma mark - autoConnect
 - (void)autoConnect
 {
     [SigBearer.share startMeshConnectWithComplete:^(BOOL successful) {
@@ -325,11 +380,13 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     }];
 }
 
+#pragma mark - stopScanning
 - (void)stopScanning
 {
     [SDKLibCommand stopScan];
 }
 
+#pragma mark - startScanning
 - (void)startScanning
 {
     TeLogVerbose(@"");
@@ -408,6 +465,7 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     }];
 }
 
+#pragma mark - kickOut
 - (void)getNodes:(RCTPromiseResolveBlock)resolve withRejecter:(RCTPromiseRejectBlock)reject
 {
     NSMutableArray<SigNodeModel*> *source = [NSMutableArray arrayWithArray:SigDataSource.share.curNodes];
@@ -432,6 +490,7 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     resolve(arr);
 }
 
+#pragma mark - kickOut
 - (void)kickOut:(nonnull NSNumber*)address
 {
     [DemoCommand
@@ -439,54 +498,87 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
      retryCount:SigDataSource.share.defaultRetryCount
      responseMaxCount:1
      successCallback:^(UInt16 source, UInt16 destination, SigConfigNodeResetStatus * _Nonnull responseMessage) {
-        [SigDataSource.share deleteNodeFromMeshNetworkWithDeviceAddress:[address unsignedShortValue]];
+        //
     }
      resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        [SigDataSource.share deleteNodeFromMeshNetworkWithDeviceAddress:[address unsignedShortValue]];
         if (isResponseAll) {
-            TeLogDebug(@"kickout success.");
             [self sendEventWithName:EVENT_RESET_NODE_SUCCESS body:address];
-        } else {
-            TeLogDebug(@"kickout fail.");
-            [self sendEventWithName:EVENT_RESET_NODE_FAILED body:address];
+            return;
+        }
+        [self sendEventWithName:EVENT_RESET_NODE_FAILED body:address];
+    }];
+}
+
+#pragma mark - addDeviceToGroup
+- (void)addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+{
+    [DemoCommand
+     editSubscribeListWithWithDestination:[deviceId unsignedShortValue]
+     isAdd:YES
+     groupAddress:[groupId unsignedShortValue]
+     elementAddress:[deviceId unsignedShortValue]
+     modelIdentifier:4096
+     companyIdentifier:0
+     retryCount:SigDataSource.share.defaultRetryCount
+     responseMaxCount:1
+     successCallback:^(UInt16 source, UInt16 destination, SigConfigModelSubscriptionStatus * _Nonnull responseMessage) {
+        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
+}
+
+#pragma mark - removeDeviceFromGroup
+- (void)removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
+{
+    [DemoCommand
+     editSubscribeListWithWithDestination:[deviceId unsignedShortValue]
+     isAdd:NO
+     groupAddress:[groupId unsignedShortValue]
+     elementAddress:[deviceId unsignedShortValue]
+     modelIdentifier:4096
+     companyIdentifier:0
+     retryCount:SigDataSource.share.defaultRetryCount
+     responseMaxCount:1
+     successCallback:^(UInt16 source, UInt16 destination, SigConfigModelSubscriptionStatus * _Nonnull responseMessage) {
+        //
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
+        //
+    }];
+}
+
+#pragma mark - setSceneForDevice
+RCT_EXTERN_METHOD(setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId)
+- (void)setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId
+{
+    [DemoCommand
+     getSceneRegisterStatusWithAddress:[deviceId unsignedShortValue]
+     responseMaxCount:1
+     successCallback:^(UInt16 source, UInt16 destination, SigSceneRegisterStatus * _Nonnull responseMessage) {
+        TeLogDebug(@"getSceneRegisterStatusWithAddress ResponseModel=%@",responseMessage.parameters);
+    }
+     resultCallback:^(BOOL isResponseAll, NSError * _Nonnull error) {
+        if (error == nil) {
+            [DemoCommand
+             saveSceneWithAddress:[deviceId unsignedShortValue]
+             sceneId:[sceneId unsignedShortValue]
+             responseMaxCount:1
+             ack:YES
+             successCallback:^(UInt16 source, UInt16 destination, SigSceneRegisterStatus * _Nonnull responseMessage) {
+                TeLogDebug(@"saveSceneWithAddress ResponseModel=%@",responseMessage.parameters);
+            } resultCallback:^(BOOL isResponseAll, NSError * _Nonnull error) {
+                if (error == nil) {
+                    //
+                }
+            }];
         }
     }];
 }
 
-- (void)forceRemoveNodeAtAddress:(nonnull NSNumber*)address
-{
-    [SigDataSource.share deleteNodeFromMeshNetworkWithDeviceAddress:[address unsignedShortValue]];
-}
-
-- (void)resetBle
-{
-    [SigDataSource.share deleteAllSigOOBModel];
-}
-
-- (void)addDeviceToGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
-{
-    
-}
-
-- (void)removeDeviceFromGroup:(nonnull NSNumber*)groupId withDeviceId:(nonnull NSNumber*)deviceId;
-{
-    
-}
-
-- (void)setSceneForDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId;
-{
-    [DemoCommand
-     saveSceneWithAddress:[deviceId unsignedShortValue]
-     sceneId:[sceneId unsignedShortValue]
-     responseMaxCount:1
-     ack:YES
-     successCallback:^(UInt16 source, UInt16 destination, SigSceneRegisterStatus * _Nonnull responseMessage) {
-        //
-    }
-     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
-        //
-    }];
-}
-
+#pragma mark - removeSceneFromDevice
 - (void)removeSceneFromDevice:(nonnull NSNumber*)sceneId withDeviceId:(nonnull NSNumber*)deviceId
 {
     [DemoCommand
@@ -502,19 +594,19 @@ RCT_EXPORT_METHOD(startProvisioning:(nonnull NSString*)uuid)
     }];
 }
 
-- (void)triggerScene:(nonnull NSNumber*)sceneId
+#pragma mark - triggerScene
+- (void)triggerScene:(nonnull NSNumber*)sceneId withRetryCount:(nonnull NSNumber*)retryCount
 {
-    [SDKLibCommand
-     sceneRecallWithDestination:0xFFFF
-     sceneNumber:[sceneId unsignedShortValue]
-     retryCount:0
-     responseMaxCount:0
+    [DemoCommand
+     recallSceneWithAddress:0xFFFF
+     sceneId:[sceneId unsignedShortValue]
+     responseMaxCount:[retryCount intValue]
      ack:YES
      successCallback:^(UInt16 source, UInt16 destination, SigSceneStatus * _Nonnull responseMessage) {
-        //
+        TeLogDebug(@"recall scene:%hu,status:%d",responseMessage.targetScene,responseMessage.statusCode);
     }
-     resultCallback:^(BOOL isResponseAll, NSError * _Nullable error) {
-        //
+     resultCallback:^(BOOL isResponseAll, NSError * _Nonnull error) {
+        
     }];
 }
 
