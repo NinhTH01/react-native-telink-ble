@@ -1,3 +1,6 @@
 [submodule "TelinkBleMeshLib"]
 	path = TelinkBleMeshLib
 	url = https://github.com/thanhtunguet/TelinkBleMeshLib.git
+[submodule "example"]
+	path = example
+	url = https://truesight.asia/DefaultCollection/Mobile%20Team/_git/RangDongBluetooth
