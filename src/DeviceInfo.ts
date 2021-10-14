@@ -1,4 +1,4 @@
-export interface UnprovisionedDevice {
+export interface DeviceInfo {
   uuid?: string;
 
   macAddress?: string;
@@ -8,4 +8,6 @@ export interface UnprovisionedDevice {
   manufacturerData?: string;
 
   rssi?: number;
+
+  name?: string;
 }

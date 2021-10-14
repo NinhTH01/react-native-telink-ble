@@ -1,12 +1,12 @@
 import type { EventSubscription, NativeEventEmitter } from 'react-native';
 import TelinkBle from 'react-native-telink-ble';
 import { BleEvent } from './BleEvent';
+import type { DeviceInfo } from './DeviceInfo';
 import { uint16ToHexString } from './helpers/native';
 import type { MeshStatus } from './MeshStatus';
-import type { NodeInfo } from './NodeInfo';
-import type { UnprovisionedDevice } from './UnprovisionedDevice';
+import { TelinkBleModule } from './TelinkBleModule';
 
-export abstract class RNTelinkBle {
+export abstract class RNTelinkBle extends TelinkBleModule {
   /**
    * Native module event emitter
    *
@@ -20,47 +20,9 @@ export abstract class RNTelinkBle {
    * @param eventEmitter {NativeEventEmitter}
    */
   protected constructor(eventEmitter: NativeEventEmitter) {
+    super();
     this.eventEmitter = eventEmitter;
   }
-
-  /**
-   * Start mesh network connection
-   */
-  public abstract autoConnect(): void;
-
-  /**
-   * Get provisioned node list
-   */
-  public abstract getNodes(): Promise<NodeInfo[]>;
-
-  /**
-   * Send raw command in hex string to BLE network
-   *
-   * @param command {string} - Raw BLE command
-   */
-  public abstract sendRawString(command: string): void;
-
-  /**
-   * Start unprovisioned device scanning
-   */
-  public abstract startScanning(): void;
-
-  /**
-   * Stop unprovisioned device scanning
-   */
-  public abstract stopScanning(): void;
-
-  /**
-   * Start adding all unprovisioned devices and bind them with mesh application key
-   */
-  public abstract startAddingAllDevices(): void;
-
-  /**
-   *
-   * @param meshAddress {number} - Node address
-   * @param status {boolean} - On-off status
-   */
-  public abstract setStatus(meshAddress: number, status: boolean): void;
 
   /**
    * Turn on all devices
@@ -75,42 +37,6 @@ export abstract class RNTelinkBle {
   public setAllOff(): void {
     this.setStatus(0xffff, false);
   }
-
-  /**
-   *
-   * @param meshAddress {number} - Node address
-   * @param brightness {number} - Brightness (0..100)
-   */
-  public abstract setBrightness(meshAddress: number, brightness: number): void;
-
-  /**
-   *
-   * @param meshAddress {number} - Node address
-   * @param temperature {number} - Light temperature (0..100)
-   */
-  public abstract setTemperature(
-    meshAddress: number,
-    temperature: number
-  ): void;
-
-  /**
-   * Set HSL for RGB lamps
-   *
-   * @param meshAddress {number} - Node address
-   * @param hsl {{
-      h: number;
-      s: number;
-      l: number;
-    }} - HSL object (h: 0..360, s: 0..100, l: 0..100)
-   */
-  public abstract setHSL(
-    meshAddress: number,
-    hsl: {
-      h: number;
-      s: number;
-      l: number;
-    }
-  ): void;
 
   /**
    * Set a scene for all devices
@@ -144,44 +70,6 @@ export abstract class RNTelinkBle {
       `a3 ff 00 00 00 00 02 00 ff ff 82 42 ${uint16ToHexString(sceneAddress)}`
     );
   }
-
-  /**
-   * Get online state
-   *
-   * @return {void}
-   */
-  public abstract getOnlineState(): void;
-
-  /**
-   * Add a node to a group
-   *
-   * @param deviceAddress {number} - Node address
-   * @param groupAddress {number} - Group address
-   */
-  public abstract addDeviceToGroup(
-    deviceAddress: number,
-    groupAddress: number
-  ): void;
-
-  /**
-   * Remove a node from a group
-   *
-   * @param deviceAddress {number} - Node address
-   * @param groupAddress {number} - Group address
-   */
-  public abstract removeDeviceFromGroup(
-    deviceAddress: number,
-    groupAddress: number
-  ): void;
-
-  public abstract shareQRCode(path: string): Promise<string>;
-
-  /**
-   * Reset BLE node
-   *
-   * @param meshAddress {number} - Node address
-   */
-  public abstract resetNode(meshAddress: number): void;
 
   /**
    * Node reset success event handler
@@ -220,13 +108,13 @@ export abstract class RNTelinkBle {
   /**
    * Setup handler for new unprovisioned device found event
    *
-   * @param callback {(device: UnprovisionedDevice) => void | Promise<void>} - Unprovisioned device handler
+   * @param callback {(device: DeviceInfo) => void | Promise<void>} - Unprovisioned device handler
    */
-  public onUnprovisionedDeviceFound(
-    callback: (device: UnprovisionedDevice) => void | Promise<void>
+  public onDeviceFound(
+    callback: (device: DeviceInfo) => void | Promise<void>
   ): () => void {
     const subscription: EventSubscription = this.eventEmitter.addListener(
-      BleEvent.EVENT_UNPROVISIONED_DEVICE_FOUND,
+      BleEvent.EVENT_DEVICE_FOUND,
       callback
     );
 
@@ -311,5 +199,20 @@ export abstract class RNTelinkBle {
     };
   }
 
-  public abstract setDelegateForIOS(): void;
+  /**
+   * Unprovisioned device scanning finish
+   *
+   * @param callback {() => void | Promise<void>}
+   * @returns {() => void}
+   */
+  public onAndroidScanFinish(callback: () => void | Promise<void>): () => void {
+    const subscription: EventSubscription = this.eventEmitter.addListener(
+      BleEvent.EVENT_ANDROID_SCAN_FINISH,
+      callback
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }
 }

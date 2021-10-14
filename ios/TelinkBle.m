@@ -46,12 +46,14 @@ RCT_EXTERN_METHOD(startAddingAllDevices)
 - (NSDictionary*)getJSModel:(SigScanRspModel*)scanModel
 {
     NSData* manufacturerData = (NSData*) [scanModel.advertisementData valueForKey:@"kCBAdvDataManufacturerData"];
+    NSString* manufacturerDataString = [manufacturerData hexadecimalString];
     return @{
         @"meshAddress": [NSNumber numberWithUnsignedShort:[scanModel address]],
         @"macAddress": [scanModel macAddress],
         @"uuid": [scanModel uuid],
-        @"manufacturerData": [manufacturerData hexadecimalString],
+        @"manufacturerData": manufacturerDataString,
         @"provisioned": [NSNumber numberWithBool:[scanModel provisioned]],
+        @"deviceType": [manufacturerDataString substringWithRange:NSMakeRange(54, 8)],
     };
 }
 
@@ -60,7 +62,7 @@ RCT_EXTERN_METHOD(startAddingAllDevices)
     return @[
         EVENT_MESH_NETWORK_CONNECTION,
         // Unprovisioned devices
-        EVENT_UNPROVISIONED_DEVICE_FOUND,
+        EVENT_DEVICE_FOUND,
         EVENT_SCANNING_TIMEOUT,
         EVENT_NEW_DEVICE_ADDED,
         // Device provisioning events

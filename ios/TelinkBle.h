@@ -15,7 +15,7 @@
 #import <TelinkSigMeshLib/TelinkSigMeshLib.h>
 
 #define EVENT_MESH_NETWORK_CONNECTION       @"EVENT_MESH_NETWORK_CONNECTION"
-#define EVENT_UNPROVISIONED_DEVICE_FOUND    @"EVENT_UNPROVISIONED_DEVICE_FOUND"
+#define EVENT_DEVICE_FOUND                  @"EVENT_DEVICE_FOUND"
 #define EVENT_SCANNING_TIMEOUT              @"EVENT_SCANNING_TIMEOUT"
 #define EVENT_NEW_DEVICE_ADDED              @"EVENT_NEW_DEVICE_ADDED"
 #define EVENT_PROVISIONING_SUCCESS          @"EVENT_PROVISIONING_SUCCESS"
@@ -57,7 +57,7 @@
 
 @property(strong, nonatomic) NSMutableArray<AddDeviceModel *> *_Nonnull source;
 
-- (NSDictionary* _Nullable)getJSModel:(SigScanRspModel*)scanModel;
+- (NSDictionary* _Nullable)getJSModel:(SigScanRspModel* _Nonnull)scanModel;
 
 @end
 

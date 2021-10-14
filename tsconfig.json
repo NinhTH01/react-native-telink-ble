@@ -27,5 +27,11 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext"
-  }
+  },
+  "exclude": [
+    "example/"
+  ],
+  "include": [
+    "src/"
+  ]
 }

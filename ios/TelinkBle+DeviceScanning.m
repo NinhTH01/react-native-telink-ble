@@ -91,7 +91,7 @@
         [self.source addObject:model];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self sendEventWithName:EVENT_UNPROVISIONED_DEVICE_FOUND body:[self getJSModel:scanModel]];
+        [self sendEventWithName:EVENT_DEVICE_FOUND body:[self getJSModel:scanModel]];
     });
 }
 
