@@ -1,3 +1,5 @@
+import type { HSL } from './HSL';
+
 export interface MeshStatus {
   meshAddress: number;
 
@@ -9,13 +11,7 @@ export interface MeshStatus {
 
   temperature?: number;
 
-  hsl?: {
-    hue: number;
-
-    saturation: number;
-
-    lightness: number;
-  };
+  hsl?: HSL;
 
   online?: boolean;
 }

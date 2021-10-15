@@ -95,7 +95,7 @@ export abstract class TelinkBleModule {
    *
    * (iOS Only)
    *
-   * @returns {void}
+   * @return {void}
    */
   public abstract setDelegateForIOS(): void;
 }

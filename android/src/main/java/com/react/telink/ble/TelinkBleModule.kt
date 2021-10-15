@@ -17,6 +17,7 @@ import com.telink.ble.mesh.core.message.generic.OnOffSetMessage
 import com.telink.ble.mesh.core.message.lighting.CtlTemperatureSetMessage
 import com.telink.ble.mesh.core.message.lighting.HslSetMessage
 import com.telink.ble.mesh.core.message.lighting.LightnessSetMessage
+import com.telink.ble.mesh.core.networking.AccessType
 import com.telink.ble.mesh.entity.*
 import com.telink.ble.mesh.foundation.Event
 import com.telink.ble.mesh.foundation.MeshService
@@ -90,11 +91,21 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
     MeshService.getInstance().autoConnect(AutoConnectParameters())
   }
 
-  private fun getInt(byteArray: ByteArray): Int {
+  private fun getInt(byteArray: ByteArray): Short {
     val bb: ByteBuffer = ByteBuffer.allocate(2)
     bb.order(ByteOrder.LITTLE_ENDIAN)
     bb.put(byteArray[0])
     bb.put(byteArray[1])
+    return bb.getShort(0)
+  }
+
+  private fun getIntWith3Bytes(byteArray: ByteArray): Int {
+    val bb: ByteBuffer = ByteBuffer.allocate(4)
+    bb.order(ByteOrder.LITTLE_ENDIAN)
+    bb.put(byteArray[0])
+    bb.put(byteArray[1])
+    bb.put(byteArray[2])
+    bb.put(0x00)
     return bb.getInt(0)
   }
 
@@ -102,13 +113,18 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
   fun sendRawString(command: String) {
     val meshMessage = MeshMessage()
     val bytes = command.byteArray
-    val destBytes = bytes.sliceArray(IntRange(8, 9))
-    meshMessage.destinationAddress = getInt(bytes.sliceArray(IntRange(8, 9)))
-    meshMessage.opcode = getInt(bytes.sliceArray(IntRange(10, 11)))
     meshMessage.sourceAddress = 0x0000
+    meshMessage.destinationAddress = getInt(bytes.sliceArray(IntRange(8, 9))).toInt()
+    if (bytes.size == 21) {
+      meshMessage.opcode = getIntWith3Bytes(bytes.sliceArray(IntRange(10, 12)))
+      meshMessage.params = bytes.sliceArray(IntRange(15, bytes.size - 1))
+    } else {
+      meshMessage.opcode = getInt(bytes.sliceArray(IntRange(10, 11))).toInt()
+      meshMessage.params = bytes.sliceArray(IntRange(12, bytes.size - 1))
+    }
+    meshMessage.accessType = AccessType.APPLICATION
     meshMessage.appKeyIndex = meshInfo.defaultAppKeyIndex
     meshMessage.retryCnt = 0
-    meshMessage.params = bytes.slice(IntRange(12, bytes.size - 1)).toByteArray()
     meshMessage.responseMax = 0
     MeshService.getInstance().sendMeshMessage(meshMessage)
   }
@@ -157,29 +173,22 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       meshAddress,
       appKeyIndex,
       onOff,
-      !AppSettings.ONLINE_STATUS_ENABLE,
-      rspMax,
+      false,
+      0,
     )
     MeshService.getInstance().sendMeshMessage(onOffSetMessage)
   }
 
   @ReactMethod
   fun setBrightness(meshAddress: Int, brightness: Int) {
-    val rspMax: Int = if (!AppSettings.ONLINE_STATUS_ENABLE) meshInfo.onlineCountInAll else 0
-    val node = meshInfo.nodes?.find {
-      it.meshAddress == meshAddress
-    }
-    if (node !== null) {
-      val lumEleInfo = node.lumEleInfo
-      val message = LightnessSetMessage.getSimple(
-        lumEleInfo!!.keyAt(0),
-        meshInfo.defaultAppKeyIndex,
-        UnitConvert.lum2lightness(brightness),
-        !AppSettings.ONLINE_STATUS_ENABLE,
-        rspMax
-      )
-      MeshService.getInstance().sendMeshMessage(message)
-    }
+    val message = LightnessSetMessage.getSimple(
+      meshAddress,
+      meshInfo.defaultAppKeyIndex,
+      UnitConvert.lum2lightness(brightness),
+      false,
+      0
+    )
+    MeshService.getInstance().sendMeshMessage(message)
   }
 
   @ReactMethod

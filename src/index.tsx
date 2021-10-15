@@ -9,10 +9,7 @@ import { RNTelinkBle } from './RNTelinkBle';
 const TelinkBle: RNTelinkBle & EventSubscriptionVendor =
   NativeModules.TelinkBle;
 
-TelinkBle.eventEmitter =
-  Platform.OS === 'ios'
-    ? new NativeEventEmitter(TelinkBle)
-    : new NativeEventEmitter();
+TelinkBle.eventEmitter = new NativeEventEmitter(TelinkBle);
 
 Object.setPrototypeOf(TelinkBle, RNTelinkBle.prototype);
 
@@ -21,9 +18,9 @@ if (Platform.OS === 'ios') {
 }
 
 export default TelinkBle;
-
+export { RNTelinkBle };
 export type { NodeInfo } from './NodeInfo';
 export type { DeviceInfo } from './DeviceInfo';
-export { RNTelinkBle };
-export * from './helpers/native';
 export type { MeshStatus } from './MeshStatus';
+export type { HSL } from './HSL';
+export * from './helpers/native';
