@@ -9,6 +9,7 @@ import com.telink.ble.mesh.core.message.generic.LevelStatusMessage
 import com.telink.ble.mesh.core.message.generic.OnOffStatusMessage
 import com.telink.ble.mesh.core.message.lighting.CtlStatusMessage
 import com.telink.ble.mesh.core.message.lighting.CtlTemperatureStatusMessage
+import com.telink.ble.mesh.core.message.lighting.HslStatusMessage
 import com.telink.ble.mesh.core.message.lighting.LightnessStatusMessage
 import com.telink.ble.mesh.foundation.MeshApplication
 import com.telink.ble.mesh.foundation.event.MeshEvent
@@ -51,12 +52,6 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
     }
   }
 
-  open fun setupMesh(mesh: MeshInfo?) {
-    MeshLogger.d("setup mesh info: " + meshInfo.toString())
-    meshInfo = mesh
-    dispatchEvent(MeshEvent(this, MeshEvent.EVENT_TYPE_MESH_RESET, "mesh reset"))
-  }
-
   open fun getMeshInfo(): MeshInfo? {
     return meshInfo
   }
@@ -83,6 +78,7 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
               statusChangedNode = nodeInfo
             }
             nodeInfo.onOff = onOff
+            TelinkBleModule.getInstance()?.onOnOffStatus(nodeInfo, onOff)
             break
           }
         }
@@ -120,15 +116,22 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
         for (onlineDevice in meshInfo!!.nodes) {
           if (onlineDevice.meshAddress == srcAdr) {
             val lum =
-              if (ctlStatusMessage.isComplete) ctlStatusMessage.targetLightness else ctlStatusMessage.presentLightness
+              if (ctlStatusMessage.isComplete)
+                ctlStatusMessage.targetLightness
+              else
+                ctlStatusMessage.presentLightness
             if (onLumStatus(onlineDevice, UnitConvert.lightness2lum(lum))) {
               statusChangedNode = onlineDevice
             }
             val temp =
-              if (ctlStatusMessage.isComplete) ctlStatusMessage.targetTemperature else ctlStatusMessage.presentTemperature
+              if (ctlStatusMessage.isComplete)
+                ctlStatusMessage.targetTemperature
+              else
+                ctlStatusMessage.presentTemperature
             if (onTempStatus(onlineDevice, UnitConvert.tempToTemp100(temp))) {
               statusChangedNode = onlineDevice
             }
+
             break
           }
         }
@@ -137,11 +140,12 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
         val srcAdr = message.src
         for (onlineDevice in meshInfo!!.nodes) {
           if (onlineDevice.meshAddress == srcAdr) {
-            val lum =
+            val brightness =
               if (lightnessStatusMessage.isComplete) lightnessStatusMessage.targetLightness else lightnessStatusMessage.presentLightness
-            if (onLumStatus(onlineDevice, UnitConvert.lightness2lum(lum))) {
+            if (onLumStatus(onlineDevice, UnitConvert.lightness2lum(brightness))) {
               statusChangedNode = onlineDevice
             }
+            TelinkBleModule.getInstance()?.onBrightnessStatus(onlineDevice, UnitConvert.lightness2lum(brightness))
             break
           }
         }
@@ -155,6 +159,26 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
             if (onTempStatus(onlineDevice, UnitConvert.lightness2lum(temp))) {
               statusChangedNode = onlineDevice
             }
+            TelinkBleModule.getInstance()
+              ?.onTemperatureStatus(onlineDevice, UnitConvert.tempToTemp100(UnitConvert.lightness2lum(temp)))
+            break
+          }
+        }
+      } else if (message.statusMessage is HslStatusMessage) {
+        val hslStatusMessage = statusMessage as HslStatusMessage
+        val srcAdr = message.src
+        for (onlineDevice in meshInfo!!.nodes) {
+          if (onlineDevice.meshAddress == srcAdr) {
+            val hue = hslStatusMessage.hue
+            val saturation = hslStatusMessage.saturation
+            val lightness = hslStatusMessage.lightness
+            TelinkBleModule.getInstance()
+              ?.onHSLStatus(
+                onlineDevice,
+                hue,
+                UnitConvert.tempToTemp100(saturation),
+                UnitConvert.tempToTemp100(lightness)
+              )
             break
           }
         }

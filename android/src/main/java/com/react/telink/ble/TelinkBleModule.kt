@@ -31,8 +31,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.roundToInt
 
-class TelinkBleModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext), TelinkBleEventEmitter, TelinkBleEventHandler {
+class   TelinkBleModule(reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext), TelinkBleEventEmitter, TelinkBleEventHandler, DeviceStatusHandler {
   companion object {
     val app: TelinkBleApplication
       get() = TelinkBleApplication.getInstance()
@@ -42,8 +42,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
 
     var moduleInstance: TelinkBleModule? = null
 
-    fun getInstance(): TelinkBleModule {
-      return moduleInstance!!
+    fun getInstance(): TelinkBleModule? {
+      return moduleInstance
     }
   }
 
@@ -79,10 +79,6 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
     app.addEventListener(ScanEvent.EVENT_TYPE_SCAN_TIMEOUT, this)
     app.addEventListener(ScanEvent.EVENT_TYPE_DEVICE_FOUND, this)
     app.addEventListener(ModelPublicationStatusMessage::class.java.name, this)
-    app.addEventListener(OnOffStatusMessage::class.java.name, this)
-    app.addEventListener(LightnessStatusMessage::class.java.name, this)
-    app.addEventListener(CtlTemperatureStatusMessage::class.java.name, this)
-    app.addEventListener(HslStatusMessage::class.java.name, this)
   }
 
   @ReactMethod
@@ -525,5 +521,39 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
 
     onTimePublishComplete(false, "time pub set status err: " + statusMessage.status)
     MeshLogger.log("publication err: " + statusMessage.status)
+  }
+
+  override fun onOnOffStatus(nodeInfo: NodeInfo, onOff: Int) {
+    val response = WritableNativeMap()
+    response.putString("uuid", nodeInfo.deviceUUID.hexString)
+    response.putInt("meshAddress", nodeInfo.meshAddress)
+    response.putInt("status", onOff)
+    sendEventWithName(TelinkBleEvent.EVENT_DEVICE_STATUS, response)
+  }
+
+  override fun onBrightnessStatus(nodeInfo: NodeInfo, lum: Int) {
+    val response = WritableNativeMap()
+    response.putString("uuid", nodeInfo.deviceUUID.hexString)
+    response.putInt("meshAddress", nodeInfo.meshAddress)
+    response.putInt("brightness", lum)
+    sendEventWithName(TelinkBleEvent.EVENT_DEVICE_STATUS, response)
+  }
+
+  override fun onTemperatureStatus(nodeInfo: NodeInfo, temp: Int) {
+    val response = WritableNativeMap()
+    response.putString("uuid", nodeInfo.deviceUUID.hexString)
+    response.putInt("meshAddress", nodeInfo.meshAddress)
+    response.putInt("temperature", temp)
+    sendEventWithName(TelinkBleEvent.EVENT_DEVICE_STATUS, response)
+  }
+
+  override fun onHSLStatus(nodeInfo: NodeInfo, hue: Int, saturation: Int, luminance: Int) {
+    val response = WritableNativeMap()
+    response.putString("uuid", nodeInfo.deviceUUID.hexString)
+    response.putInt("meshAddress", nodeInfo.meshAddress)
+    response.putInt("hue", hue)
+    response.putInt("saturation", saturation)
+    response.putInt("lightness", luminance)
+    sendEventWithName(TelinkBleEvent.EVENT_DEVICE_STATUS, response)
   }
 }
