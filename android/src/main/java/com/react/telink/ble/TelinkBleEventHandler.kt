@@ -1,6 +1,10 @@
 package com.react.telink.ble
 
 import com.telink.ble.mesh.core.message.config.ModelPublicationStatusMessage
+import com.telink.ble.mesh.core.message.generic.OnOffStatusMessage
+import com.telink.ble.mesh.core.message.lighting.CtlTemperatureStatusMessage
+import com.telink.ble.mesh.core.message.lighting.HslStatusMessage
+import com.telink.ble.mesh.core.message.lighting.LightnessStatusMessage
 import com.telink.ble.mesh.entity.AdvertisingDevice
 import com.telink.ble.mesh.foundation.Event
 import com.telink.ble.mesh.foundation.EventListener
@@ -55,6 +59,18 @@ interface TelinkBleEventHandler : EventListener<String?> {
       }
       event.type == ModelPublicationStatusMessage::class.java.name -> {
         onModelPublicationStatusMessage(event)
+      }
+      event.type === OnOffStatusMessage::javaClass.name -> {
+        println(event)
+      }
+      event.type === LightnessStatusMessage::javaClass.name -> {
+        println(event)
+      }
+      event.type === CtlTemperatureStatusMessage::javaClass.name -> {
+        println(event)
+      }
+      event.type === HslStatusMessage::javaClass.name -> {
+        println(event)
       }
     }
   }

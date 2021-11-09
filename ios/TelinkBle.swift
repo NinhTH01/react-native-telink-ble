@@ -34,13 +34,9 @@ extension TelinkBle {
         DemoCommand.switchOnOffWithIs(on: status.boolValue,
                 address: meshAddress.uint16Value,
                 responseMaxCount: 1,
-                ack: true,
-                successCallback: { (source, destination, responseMessage) -> Void in
-                    //
-                },
-                resultCallback: { (isResponseAll, error) -> Void in
-                    //
-                }
+                ack: false,
+                successCallback: nil,
+                resultCallback: nil
         )
     }
 
@@ -51,13 +47,9 @@ extension TelinkBle {
                 address: meshAddress.uint16Value,
                 retryCount: 0,
                 responseMaxCount: 1,
-                ack: true,
-                successCallback: { (source, destination, responseMessage) -> Void in
-                    //
-                },
-                resultCallback: { (isResponseAll, error) -> Void in
-                    //
-                }
+                ack: false,
+                successCallback: nil,
+                resultCallback: nil
         )
     }
 
@@ -72,13 +64,9 @@ extension TelinkBle {
                 address: address,
                 retryCount: 0,
                 responseMaxCount: 1,
-                ack: true,
-                successCallback: { (source, destination, responseMessage) -> Void in
-                    //
-                },
-                resultCallback: { (isResponseAll, error) -> Void in
-                    //
-                }
+                ack: false,
+                successCallback: nil,
+                resultCallback: nil
         )
     }
 
@@ -93,13 +81,9 @@ extension TelinkBle {
                 saturation: s,
                 brightness: l,
                 responseMaxCount: 1,
-                ack: true,
-                successCallback: { (source, destination, responseMessage) -> Void in
-                    //
-                },
-                resultCallback: { (isResponseAll, error) -> Void in
-                    //
-                }
+                ack: false,
+                successCallback: nil,
+                resultCallback: nil
         )
 
     }

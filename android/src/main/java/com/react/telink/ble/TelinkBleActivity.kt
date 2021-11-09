@@ -1,8 +1,11 @@
 package com.react.telink.ble
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.core.content.ContextCompat
 import com.facebook.react.ReactActivity
 import com.react.telink.ble.model.AppSettings
 import com.react.telink.ble.model.MeshInfo

@@ -14,17 +14,13 @@ import com.telink.ble.mesh.core.message.config.ModelPublicationSetMessage
 import com.telink.ble.mesh.core.message.config.ModelPublicationStatusMessage
 import com.telink.ble.mesh.core.message.config.NodeResetMessage
 import com.telink.ble.mesh.core.message.generic.OnOffSetMessage
-import com.telink.ble.mesh.core.message.lighting.CtlTemperatureSetMessage
-import com.telink.ble.mesh.core.message.lighting.HslSetMessage
-import com.telink.ble.mesh.core.message.lighting.LightnessSetMessage
+import com.telink.ble.mesh.core.message.generic.OnOffStatusMessage
+import com.telink.ble.mesh.core.message.lighting.*
 import com.telink.ble.mesh.core.networking.AccessType
 import com.telink.ble.mesh.entity.*
 import com.telink.ble.mesh.foundation.Event
 import com.telink.ble.mesh.foundation.MeshService
-import com.telink.ble.mesh.foundation.event.BindingEvent
-import com.telink.ble.mesh.foundation.event.ProvisioningEvent
-import com.telink.ble.mesh.foundation.event.ScanEvent
-import com.telink.ble.mesh.foundation.event.StatusNotificationEvent
+import com.telink.ble.mesh.foundation.event.*
 import com.telink.ble.mesh.foundation.parameter.AutoConnectParameters
 import com.telink.ble.mesh.foundation.parameter.BindingParameters
 import com.telink.ble.mesh.foundation.parameter.ProvisioningParameters
@@ -83,6 +79,10 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
     app.addEventListener(ScanEvent.EVENT_TYPE_SCAN_TIMEOUT, this)
     app.addEventListener(ScanEvent.EVENT_TYPE_DEVICE_FOUND, this)
     app.addEventListener(ModelPublicationStatusMessage::class.java.name, this)
+    app.addEventListener(OnOffStatusMessage::class.java.name, this)
+    app.addEventListener(LightnessStatusMessage::class.java.name, this)
+    app.addEventListener(CtlTemperatureStatusMessage::class.java.name, this)
+    app.addEventListener(HslStatusMessage::class.java.name, this)
   }
 
   @ReactMethod
@@ -166,15 +166,14 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun setStatus(meshAddress: Int, status: Boolean) {
-    val rspMax: Int = if (!AppSettings.ONLINE_STATUS_ENABLE) meshInfo.onlineCountInAll else 0
     val appKeyIndex: Int = meshInfo.defaultAppKeyIndex
     val onOff = if (status) 1 else 0
     val onOffSetMessage = OnOffSetMessage.getSimple(
       meshAddress,
       appKeyIndex,
       onOff,
-      false,
-      0,
+      true,
+      meshInfo.onlineCountInAll,
     )
     MeshService.getInstance().sendMeshMessage(onOffSetMessage)
   }
@@ -185,8 +184,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       meshAddress,
       meshInfo.defaultAppKeyIndex,
       UnitConvert.lum2lightness(brightness),
-      false,
-      0
+      true,
+      meshInfo.onlineCountInAll,
     )
     MeshService.getInstance().sendMeshMessage(message)
   }
@@ -203,8 +202,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
         meshInfo.defaultAppKeyIndex,
         UnitConvert.temp100ToTemp(temperature),
         0,
-        false,
-        0
+        true,
+        meshInfo.onlineCountInAll,
       )
       MeshService.getInstance().sendMeshMessage(temperatureSetMessage)
     }
@@ -225,8 +224,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
         lum,
         hue,
         sat,
-        false,
-        0
+        true,
+        meshInfo.onlineCountInAll,
       )
       MeshService.getInstance().sendMeshMessage(hslSetMessage)
     }
@@ -521,9 +520,10 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       statusNotificationEvent.notificationMessage.statusMessage as ModelPublicationStatusMessage
     if (statusMessage.status.toInt() == ConfigStatus.SUCCESS.code) {
       onTimePublishComplete(true, "time pub set success")
-    } else {
-      onTimePublishComplete(false, "time pub set status err: " + statusMessage.status)
-      MeshLogger.log("publication err: " + statusMessage.status)
+      return;
     }
+
+    onTimePublishComplete(false, "time pub set status err: " + statusMessage.status)
+    MeshLogger.log("publication err: " + statusMessage.status)
   }
 }
