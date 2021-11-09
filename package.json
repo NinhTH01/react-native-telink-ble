@@ -1,6 +1,6 @@
 {
   "name": "react-native-telink-ble",
-  "version": "0.1.3",
+  "version": "0.1.0",
   "description": "BLE Mesh library for Telink IoT devices, built for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
