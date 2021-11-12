@@ -52,6 +52,27 @@ Auto linking is available, but you need additional config steps.
     }
     ```
 
+- Disable autolink:
+
+```js
+/**
+ * @format
+ */
+
+module.exports = {
+    // ...
+    dependencies: {
+        // ...
+        'react-native-telink-ble': {
+            platforms: {
+                android: null,
+                ios: null,
+            },
+        },
+    },
+};
+
+```
 ### iOS
 
 - Add pods:
@@ -66,6 +87,12 @@ Auto linking is available, but you need additional config steps.
 
     ```sh
     cd ios && pod install && cd ..
+    ```
+
+- Edit `AppDelegate.m`:
+
+    ```m
+
     ```
 
 ## Usage

@@ -14,8 +14,9 @@ import com.telink.ble.mesh.core.message.config.ModelPublicationSetMessage
 import com.telink.ble.mesh.core.message.config.ModelPublicationStatusMessage
 import com.telink.ble.mesh.core.message.config.NodeResetMessage
 import com.telink.ble.mesh.core.message.generic.OnOffSetMessage
-import com.telink.ble.mesh.core.message.generic.OnOffStatusMessage
-import com.telink.ble.mesh.core.message.lighting.*
+import com.telink.ble.mesh.core.message.lighting.CtlTemperatureSetMessage
+import com.telink.ble.mesh.core.message.lighting.HslSetMessage
+import com.telink.ble.mesh.core.message.lighting.LightnessSetMessage
 import com.telink.ble.mesh.core.networking.AccessType
 import com.telink.ble.mesh.entity.*
 import com.telink.ble.mesh.foundation.Event
@@ -31,8 +32,9 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.roundToInt
 
-class   TelinkBleModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext), TelinkBleEventEmitter, TelinkBleEventHandler, DeviceStatusHandler {
+class TelinkBleModule(reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext), TelinkBleEventEmitter, TelinkBleEventHandler,
+  DeviceStatusHandler {
   companion object {
     val app: TelinkBleApplication
       get() = TelinkBleApplication.getInstance()
@@ -70,7 +72,6 @@ class   TelinkBleModule(reactContext: ReactApplicationContext) :
 
   init {
     moduleInstance = this
-
     app.addEventListener(ProvisioningEvent.EVENT_TYPE_PROVISION_BEGIN, this)
     app.addEventListener(ProvisioningEvent.EVENT_TYPE_PROVISION_SUCCESS, this)
     app.addEventListener(ProvisioningEvent.EVENT_TYPE_PROVISION_FAIL, this)
@@ -121,7 +122,7 @@ class   TelinkBleModule(reactContext: ReactApplicationContext) :
     meshMessage.accessType = AccessType.APPLICATION
     meshMessage.appKeyIndex = meshInfo.defaultAppKeyIndex
     meshMessage.retryCnt = 0
-    meshMessage.responseMax = 0
+    meshMessage.responseMax = meshInfo.onlineCountInAll
     MeshService.getInstance().sendMeshMessage(meshMessage)
   }
 
@@ -162,69 +163,78 @@ class   TelinkBleModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun setStatus(meshAddress: Int, status: Boolean) {
+    val ack = meshAddress != 0xFFFF
+    val rspMax = if (ack)
+      meshInfo.onlineCountInAll
+    else
+      0
     val appKeyIndex: Int = meshInfo.defaultAppKeyIndex
     val onOff = if (status) 1 else 0
     val onOffSetMessage = OnOffSetMessage.getSimple(
       meshAddress,
       appKeyIndex,
       onOff,
-      true,
-      meshInfo.onlineCountInAll,
+      ack,
+      rspMax
     )
     MeshService.getInstance().sendMeshMessage(onOffSetMessage)
   }
 
   @ReactMethod
   fun setBrightness(meshAddress: Int, brightness: Int) {
+    val ack = meshAddress != 0xFFFF
+    val rspMax = if (ack)
+      meshInfo.onlineCountInAll
+    else
+      0
     val message = LightnessSetMessage.getSimple(
       meshAddress,
       meshInfo.defaultAppKeyIndex,
       UnitConvert.lum2lightness(brightness),
-      true,
-      meshInfo.onlineCountInAll,
+      ack,
+      rspMax
     )
     MeshService.getInstance().sendMeshMessage(message)
   }
 
   @ReactMethod
   fun setTemperature(meshAddress: Int, temperature: Int) {
-    val node = meshInfo.nodes?.find {
-      it.meshAddress == meshAddress
-    }
-    if (node !== null) {
-      val tempEleInfo = node.tempEleInfo
-      val temperatureSetMessage = CtlTemperatureSetMessage.getSimple(
-        tempEleInfo!!.keyAt(0),
-        meshInfo.defaultAppKeyIndex,
-        UnitConvert.temp100ToTemp(temperature),
-        0,
-        true,
-        meshInfo.onlineCountInAll,
-      )
-      MeshService.getInstance().sendMeshMessage(temperatureSetMessage)
-    }
+    val ack = meshAddress != 0xFFFF
+    val rspMax = if (ack)
+      meshInfo.onlineCountInAll
+    else
+      0
+    val temperatureSetMessage = CtlTemperatureSetMessage.getSimple(
+      if (meshAddress == 0xFFFF) 0xFFFF else meshAddress + 1,
+      meshInfo.defaultAppKeyIndex,
+      UnitConvert.temp100ToTemp(temperature),
+      0,
+      ack,
+      rspMax
+    )
+    MeshService.getInstance().sendMeshMessage(temperatureSetMessage)
   }
 
   @ReactMethod
   fun setHSL(meshAddress: Int, hsl: ReadableMap) {
-    val node = meshInfo.nodes?.find {
-      it.meshAddress == meshAddress
-    }
-    if (node !== null) {
-      val hslElementAddress = node.getTargetEleAdr(MeshSigModel.SIG_MD_LIGHT_HSL_S.modelId)
-      val hue = (hsl.getDouble("h") * 65535 / 360).roundToInt()
-      val sat = UnitConvert.lum2lightness(hsl.getDouble("s").roundToInt())
-      val lum = UnitConvert.lum2lightness(hsl.getDouble("l").roundToInt())
-      val hslSetMessage = HslSetMessage.getSimple(
-        hslElementAddress, meshInfo.defaultAppKeyIndex,
-        lum,
-        hue,
-        sat,
-        true,
-        meshInfo.onlineCountInAll,
-      )
-      MeshService.getInstance().sendMeshMessage(hslSetMessage)
-    }
+    val ack = meshAddress != 0xFFFF
+    val rspMax = if (ack)
+      meshInfo.onlineCountInAll
+    else
+      0
+    val hue = (hsl.getDouble("h") * 65535 / 360).roundToInt()
+    val sat = UnitConvert.lum2lightness(hsl.getDouble("s").roundToInt())
+    val lum = UnitConvert.lum2lightness(hsl.getDouble("l").roundToInt())
+    val hslSetMessage = HslSetMessage.getSimple(
+      meshAddress,
+      meshInfo.defaultAppKeyIndex,
+      lum,
+      hue,
+      sat,
+      ack,
+      rspMax
+    )
+    MeshService.getInstance().sendMeshMessage(hslSetMessage)
   }
 
   @ReactMethod
@@ -551,9 +561,11 @@ class   TelinkBleModule(reactContext: ReactApplicationContext) :
     val response = WritableNativeMap()
     response.putString("uuid", nodeInfo.deviceUUID.hexString)
     response.putInt("meshAddress", nodeInfo.meshAddress)
-    response.putInt("hue", hue)
-    response.putInt("saturation", saturation)
-    response.putInt("lightness", luminance)
+    val hsl = WritableNativeMap()
+    hsl.putInt("hue", hue)
+    hsl.putInt("saturation", saturation)
+    hsl.putInt("lightness", luminance)
+    response.putMap("hsl", hsl)
     sendEventWithName(TelinkBleEvent.EVENT_DEVICE_STATUS, response)
   }
 }

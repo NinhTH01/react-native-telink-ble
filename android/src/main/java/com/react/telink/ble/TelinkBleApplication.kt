@@ -18,6 +18,7 @@ import com.telink.ble.mesh.foundation.event.OnlineStatusEvent
 import com.telink.ble.mesh.foundation.event.StatusNotificationEvent
 import com.telink.ble.mesh.util.FileSystem
 import com.telink.ble.mesh.util.MeshLogger
+import kotlin.math.roundToInt
 
 abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
   private var meshInfo: MeshInfo? = null
@@ -175,7 +176,7 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
             TelinkBleModule.getInstance()
               ?.onHSLStatus(
                 onlineDevice,
-                hue,
+                (hue.toDouble() / 0xFFFF * 360).roundToInt(),
                 UnitConvert.tempToTemp100(saturation),
                 UnitConvert.tempToTemp100(lightness)
               )
