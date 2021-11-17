@@ -163,65 +163,45 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun setStatus(meshAddress: Int, status: Boolean) {
-    val ack = meshAddress != 0xFFFF
-    val rspMax = if (ack)
-      meshInfo.onlineCountInAll
-    else
-      0
     val appKeyIndex: Int = meshInfo.defaultAppKeyIndex
     val onOff = if (status) 1 else 0
     val onOffSetMessage = OnOffSetMessage.getSimple(
       meshAddress,
       appKeyIndex,
       onOff,
-      ack,
-      rspMax
+      false,
+      0
     )
     MeshService.getInstance().sendMeshMessage(onOffSetMessage)
   }
 
   @ReactMethod
   fun setBrightness(meshAddress: Int, brightness: Int) {
-    val ack = meshAddress != 0xFFFF
-    val rspMax = if (ack)
-      meshInfo.onlineCountInAll
-    else
-      0
     val message = LightnessSetMessage.getSimple(
       meshAddress,
       meshInfo.defaultAppKeyIndex,
       UnitConvert.lum2lightness(brightness),
-      ack,
-      rspMax
+      false,
+      0
     )
     MeshService.getInstance().sendMeshMessage(message)
   }
 
   @ReactMethod
   fun setTemperature(meshAddress: Int, temperature: Int) {
-    val ack = meshAddress != 0xFFFF
-    val rspMax = if (ack)
-      meshInfo.onlineCountInAll
-    else
-      0
     val temperatureSetMessage = CtlTemperatureSetMessage.getSimple(
       if (meshAddress == 0xFFFF) 0xFFFF else meshAddress + 1,
       meshInfo.defaultAppKeyIndex,
       UnitConvert.temp100ToTemp(temperature),
       0,
-      ack,
-      rspMax
+      false,
+      0
     )
     MeshService.getInstance().sendMeshMessage(temperatureSetMessage)
   }
 
   @ReactMethod
   fun setHSL(meshAddress: Int, hsl: ReadableMap) {
-    val ack = meshAddress != 0xFFFF
-    val rspMax = if (ack)
-      meshInfo.onlineCountInAll
-    else
-      0
     val hue = (hsl.getDouble("h") * 65535 / 360).roundToInt()
     val sat = UnitConvert.lum2lightness(hsl.getDouble("s").roundToInt())
     val lum = UnitConvert.lum2lightness(hsl.getDouble("l").roundToInt())
@@ -231,8 +211,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       lum,
       hue,
       sat,
-      ack,
-      rspMax
+      false,
+      0
     )
     MeshService.getInstance().sendMeshMessage(hslSetMessage)
   }
@@ -477,6 +457,8 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       return
     }
     val nodeInfo = NodeInfo()
+    val scanRecord = advertisingDevice.scanRecord.hexString
+    println(scanRecord)
     nodeInfo.meshAddress = -1
     nodeInfo.deviceUUID = deviceUUID
     nodeInfo.macAddress = advertisingDevice.device.address

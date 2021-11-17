@@ -51,25 +51,11 @@
     if ([message isKindOfClass:[SigLightLightnessStatus class]])
     {
         SigLightLightnessStatus* msg = (SigLightLightnessStatus*) message;
-        UInt8 lightness = [LibTools lightnessToLum:msg.targetLightness];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
                 @"uuid": [self getUUIDFromMeshAddress:source],
                 @"meshAddress": [NSNumber numberWithUnsignedShort:source],
-                @"brightness": [NSNumber numberWithUnsignedInt:lightness],
-            }];
-        });
-    }
-    
-    if ([message isKindOfClass:[SigLightLightnessStatus class]])
-    {
-        SigLightLightnessStatus* msg = (SigLightLightnessStatus*) message;
-        UInt8 lightness = [LibTools lightnessToLum:msg.targetLightness];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"uuid": [self getUUIDFromMeshAddress:source],
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
-                @"brightness": [NSNumber numberWithUnsignedInt:lightness],
+                @"brightness": [NSNumber numberWithUnsignedShort:msg.targetLightness / 0xFFFF * 100],
             }];
         });
     }
@@ -78,10 +64,19 @@
     {
         SigLightCTLTemperatureStatus* msg = (SigLightCTLTemperatureStatus*) message;
         UInt8 temperature = [LibTools tempToTemp100:msg.presentCTLTemperature];
+        NSString* uuid;
+        for (SigNodeModel* node in SigDataSource.share.curNodes)
+        {
+            if (node.temperatureAddresses.count > 0) {
+                if ([node.temperatureAddresses[0] unsignedShortValue] == source) {
+                    uuid = node.UUID;
+                }
+            }
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"uuid": [self getUUIDFromMeshAddress:source - 1],
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
+                @"uuid": uuid,
+                @"meshAddress": [NSNumber numberWithUnsignedShort:source-1],
                 @"temperature": [NSNumber numberWithUnsignedInt:temperature],
             }];
         });

@@ -47,14 +47,17 @@ RCT_EXTERN_METHOD(startAddingAllDevices)
 {
     NSData* manufacturerData = (NSData*) [scanModel.advertisementData valueForKey:@"kCBAdvDataManufacturerData"];
     NSString* manufacturerDataString = [manufacturerData hexadecimalString];
-    return @{
-        @"meshAddress": [NSNumber numberWithUnsignedShort:[scanModel address]],
-        @"macAddress": [scanModel macAddress],
-        @"uuid": [scanModel uuid],
-        @"manufacturerData": manufacturerDataString,
-        @"provisioned": [NSNumber numberWithBool:[scanModel provisioned]],
-        @"deviceType": [manufacturerDataString substringWithRange:NSMakeRange(54, 8)],
-    };
+    if (manufacturerDataString != nil) {
+        return @{
+            @"meshAddress": [NSNumber numberWithUnsignedShort:[scanModel address]],
+            @"macAddress": [scanModel macAddress],
+            @"uuid": [scanModel uuid],
+            @"manufacturerData": manufacturerDataString,
+            @"provisioned": [NSNumber numberWithBool:[scanModel provisioned]],
+            @"deviceType": [manufacturerDataString substringWithRange:NSMakeRange(54, 8)],
+        };
+    }
+    return nil;
 }
 
 - (NSArray<NSString *> *)supportedEvents
