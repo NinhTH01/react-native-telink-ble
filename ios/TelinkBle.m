@@ -5,7 +5,6 @@
 #import "DemoCommand.h"
 #import "NSString+extension.h"
 #import "NSData+Conversion.h"
-#import "UIImage+Extension.h"
 
 @implementation TelinkBle
 

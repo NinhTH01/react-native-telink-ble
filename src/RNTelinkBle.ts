@@ -45,7 +45,9 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    */
   public setScene(sceneAddress: number): void {
     TelinkBle.sendRawString(
-      `a3 ff 00 00 00 00 02 00 ff ff 82 46 ${uint16ToHexString(sceneAddress)}`
+      `a3 ff 00 00 00 00 02 00 ff ff 82 46 ${uint16ToHexString(
+        sceneAddress
+      )} 00`
     );
   }
 
@@ -56,7 +58,9 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    */
   public removeScene(sceneAddress: number): void {
     TelinkBle.sendRawString(
-      `a3 ff 00 00 00 00 02 00 ff ff 82 9E ${uint16ToHexString(sceneAddress)}`
+      `a3 ff 00 00 00 00 02 00 ff ff 82 9E ${uint16ToHexString(
+        sceneAddress
+      )} 00`
     );
   }
 
@@ -67,7 +71,9 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    */
   public recallScene(sceneAddress: number): void {
     TelinkBle.sendRawString(
-      `a3 ff 00 00 00 00 02 00 ff ff 82 42 ${uint16ToHexString(sceneAddress)}`
+      `a3 ff 00 00 00 00 02 00 ff ff 82 42 ${uint16ToHexString(
+        sceneAddress
+      )} 00`
     );
   }
 
