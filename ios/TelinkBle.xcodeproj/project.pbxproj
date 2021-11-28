@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5387077B2711DB8D001F8FEA /* UIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5387077A2711DB8D001F8FEA /* UIImage+Extension.m */; };
 		5387077D2711E3B0001F8FEA /* TelinkBle+SigMessageDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5387077C2711E3B0001F8FEA /* TelinkBle+SigMessageDelegate.m */; };
 		538707812711E497001F8FEA /* TelinkBle+DeviceScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = 538707802711E497001F8FEA /* TelinkBle+DeviceScanning.m */; };
 		53AB2AEA2707572A00CA74B1 /* NSString+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AB2AE92707572A00CA74B1 /* NSString+extension.m */; };
@@ -32,8 +31,6 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libTelinkBle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTelinkBle.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		538707792711DB7F001F8FEA /* UIImage+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extension.h"; sourceTree = "<group>"; };
-		5387077A2711DB8D001F8FEA /* UIImage+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extension.m"; sourceTree = "<group>"; };
 		5387077C2711E3B0001F8FEA /* TelinkBle+SigMessageDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TelinkBle+SigMessageDelegate.m"; sourceTree = "<group>"; };
 		5387077E2711E3BF001F8FEA /* TelinkBle+SigMessageDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelinkBle+SigMessageDelegate.h"; sourceTree = "<group>"; };
 		5387077F2711E489001F8FEA /* TelinkBle+DeviceScanning.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelinkBle+DeviceScanning.h"; sourceTree = "<group>"; };
@@ -77,8 +74,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				538707792711DB7F001F8FEA /* UIImage+Extension.h */,
-				5387077A2711DB8D001F8FEA /* UIImage+Extension.m */,
 				53AB2AED27076FB800CA74B1 /* NSData+Conversion.h */,
 				53AB2AEB27076FA500CA74B1 /* NSData+Conversion.m */,
 				53AB2AE82707571C00CA74B1 /* NSString+extension.h */,
@@ -161,7 +156,6 @@
 			files = (
 				53AB2AEC27076FA500CA74B1 /* NSData+Conversion.m in Sources */,
 				538707812711E497001F8FEA /* TelinkBle+DeviceScanning.m in Sources */,
-				5387077B2711DB8D001F8FEA /* UIImage+Extension.m in Sources */,
 				F4FF95D7245B92E800C19C63 /* TelinkBle.swift in Sources */,
 				53C4B12D27081F81007E6D6B /* TelinkBle+MeshSDK.m in Sources */,
 				53E1E32627071A4B008A5E00 /* AddDeviceStateModel.m in Sources */,

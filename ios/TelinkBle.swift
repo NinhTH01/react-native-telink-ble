@@ -221,27 +221,6 @@ extension TelinkBle {
                 }
         )
     }
-
-    @objc(shareQRCode:withResolver:withRejecter:)
-    func shareQRCode(path: String, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
-        TelinkHttpManager.share().uploadJsonDictionary(
-                SigDataSource.share().getFormatDictionaryFromDataSource(),
-                timeout: 300,
-                didLoadData: { (result: Any?, error: Error?) -> Void in
-                    if (error != nil) {
-                        return;
-                    }
-                    let dic = result as! NSDictionary
-                    let meshData: String = dic["data"] as! String
-                    let image: UIImage = UIImage.createQRImage(with: meshData, rate: 3)
-                    if let data = image.pngData() {
-                        let filename = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(path)
-                        try? data.write(to: filename)
-                        resolve(filename.path)
-                    }
-                }
-        )
-    }
 }
 
 extension Data {

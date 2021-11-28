@@ -36,52 +36,6 @@
         });
     }
     
-    if ([message isKindOfClass:[SigGenericOnOffStatus class]])
-    {
-        SigGenericOnOffStatus* msg = (SigGenericOnOffStatus*) message;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"uuid": [self getUUIDFromMeshAddress:source],
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
-                @"status": [NSNumber numberWithBool:msg.targetState],
-            }];
-        });
-    }
-    
-    if ([message isKindOfClass:[SigLightLightnessStatus class]])
-    {
-        SigLightLightnessStatus* msg = (SigLightLightnessStatus*) message;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"uuid": [self getUUIDFromMeshAddress:source],
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
-                @"brightness": [NSNumber numberWithUnsignedShort:msg.targetLightness / 0xFFFF * 100],
-            }];
-        });
-    }
-    
-    if ([message isKindOfClass:[SigLightCTLTemperatureStatus class]])
-    {
-        SigLightCTLTemperatureStatus* msg = (SigLightCTLTemperatureStatus*) message;
-        UInt8 temperature = [LibTools tempToTemp100:msg.presentCTLTemperature];
-        NSString* uuid;
-        for (SigNodeModel* node in SigDataSource.share.curNodes)
-        {
-            if (node.temperatureAddresses.count > 0) {
-                if ([node.temperatureAddresses[0] unsignedShortValue] == source) {
-                    uuid = node.UUID;
-                }
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"uuid": uuid,
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source-1],
-                @"temperature": [NSNumber numberWithUnsignedInt:temperature],
-            }];
-        });
-    }
-    
     if ([message isKindOfClass:[SigLightHSLStatus class]])
     {
         SigLightHSLStatus* msg = (SigLightHSLStatus*) message;
@@ -99,22 +53,42 @@
                 },
             }];
         });
+        return;
+    }
+    
+    UInt32 opCode = message.opCode;
+    if (opCode == 0x8260) {
+        NSInteger brightness;
+        NSInteger temperature;
+        NSData* params = message.parameters;
+        [params getBytes:&brightness range:NSMakeRange(0, 2)];
+        [params getBytes:&temperature range:NSMakeRange(2, 2)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
+                @"status": [NSNumber numberWithBool:(brightness > 0)],
+                @"brightness": [NSNumber numberWithUnsignedInt:[LibTools lightnessToLum:brightness]],
+                @"temperature": [NSNumber numberWithUnsignedInt:[LibTools tempToTemp100:temperature]],
+                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
+                @"uuid": [self getUUIDFromMeshAddress:source],
+            }];
+        });
+        return;
     }
 }
 
 - (void)didSendMessage:(SigMeshMessage *)message fromLocalElement:(SigElementModel *)localElement toDestination:(UInt16)destination
 {
-    //
+    NSLog(@"Sent message to %d with opcode %d", destination, message.opCode);
 }
 
 - (void)failedToSendMessage:(SigMeshMessage *)message fromLocalElement:(SigElementModel *)localElement toDestination:(UInt16)destination error:(NSError *)error
 {
-    //
+    NSLog(@"Failed to send message to %d with opcode %d", destination, message.opCode);
 }
 
 - (void)didReceiveSigProxyConfigurationMessage:(SigProxyConfigurationMessage *)message sentFromSource:(UInt16)source toDestination:(UInt16)destination
 {
-    //
+    NSLog(@"Received SigProxyConfigurationMessage with opcode %d", message.opCode);
 }
 
 @end
