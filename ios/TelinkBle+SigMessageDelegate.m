@@ -63,15 +63,18 @@
         NSData* params = message.parameters;
         [params getBytes:&brightness range:NSMakeRange(0, 2)];
         [params getBytes:&temperature range:NSMakeRange(2, 2)];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
-                @"status": [NSNumber numberWithBool:(brightness > 0)],
-                @"brightness": [NSNumber numberWithUnsignedInt:[LibTools lightnessToLum:brightness]],
-                @"temperature": [NSNumber numberWithUnsignedInt:[LibTools tempToTemp100:temperature]],
-                @"meshAddress": [NSNumber numberWithUnsignedShort:source],
-                @"uuid": [self getUUIDFromMeshAddress:source],
-            }];
-        });
+        NSString* uuid = [self getUUIDFromMeshAddress:source];
+        if (uuid) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self sendEventWithName:EVENT_DEVICE_STATUS body:@{
+                    @"status": [NSNumber numberWithBool:(brightness > 0)],
+                    @"brightness": [NSNumber numberWithUnsignedInt:[LibTools lightnessToLum:brightness]],
+                    @"temperature": [NSNumber numberWithUnsignedInt:[LibTools tempToTemp100:temperature]],
+                    @"meshAddress": [NSNumber numberWithUnsignedShort:source],
+                    @"uuid": uuid,
+                }];
+            });
+        }
         return;
     }
 }
