@@ -143,12 +143,7 @@
       "no-bitwise": "off",
       "no-shadow": "off",
       "@typescript-eslint/no-var-requires": "off",
-      "@typescript-eslint/consistent-type-imports": [
-        "error",
-        {
-          "prefer": "type-imports"
-        }
-      ],
+      "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-empty-interface": "off",
