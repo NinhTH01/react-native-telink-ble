@@ -1,5 +1,4 @@
 import type { EventSubscription, NativeEventEmitter } from 'react-native';
-import TelinkBle from 'react-native-telink-ble';
 import { BleEvent } from './BleEvent';
 import type { DeviceInfo } from './DeviceInfo';
 import { uint16ToHexString } from './helpers/native';
@@ -44,7 +43,7 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    * @param sceneAddress {number} - Scene mesh address
    */
   public setScene(sceneAddress: number): void {
-    TelinkBle.sendRawString(
+    this.sendRawString(
       `a3 ff 00 00 00 00 02 00 ff ff 82 46 ${uint16ToHexString(
         sceneAddress
       )} 00`
@@ -57,7 +56,7 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    * @param sceneAddress {number} - Scene mesh address
    */
   public removeScene(sceneAddress: number): void {
-    TelinkBle.sendRawString(
+    this.sendRawString(
       `a3 ff 00 00 00 00 02 00 ff ff 82 9E ${uint16ToHexString(
         sceneAddress
       )} 00`
@@ -70,7 +69,7 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    * @param sceneAddress {number} - Scene mesh address
    */
   public recallScene(sceneAddress: number): void {
-    TelinkBle.sendRawString(
+    this.sendRawString(
       `a3 ff 00 00 00 00 02 00 ff ff 82 42 ${uint16ToHexString(
         sceneAddress
       )} 00`
