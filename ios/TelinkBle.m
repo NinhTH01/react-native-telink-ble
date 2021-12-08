@@ -34,6 +34,8 @@ RCT_EXTERN_METHOD(removeDeviceFromGroup:(nonnull NSNumber*)deviceAddress withGro
 
 RCT_EXTERN_METHOD(resetNode:(nonnull NSNumber*)deviceAddress);
 
+RCT_EXTERN_METHOD(recallScene:(nonnull NSNumber*)sceneAddress);
+
 RCT_EXTERN_METHOD(setDelegateForIOS)
 
 RCT_EXTERN_METHOD(getOnlineState)

@@ -105,6 +105,12 @@ extension TelinkBle {
         )
     }
 
+    @objc(recallScene:)
+    func recallScene(sceneAddress: NSNumber) -> Void {
+        DemoCommand.recallScene(withAddress: 0xFFFF, sceneId: sceneAddress.uint16Value, responseMaxCount: 0, ack: false, successCallback: nil, resultCallback: nil);
+    }
+
+    
     @objc(autoConnect)
     func autoConnect() -> Void {
         SigBearer.share().startMeshConnect { successful in
