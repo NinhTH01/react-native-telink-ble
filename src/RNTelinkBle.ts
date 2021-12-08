@@ -68,13 +68,7 @@ export abstract class RNTelinkBle extends TelinkBleModule {
    *
    * @param sceneAddress {number} - Scene mesh address
    */
-  public recallScene(sceneAddress: number): void {
-    this.sendRawString(
-      `a3 ff 00 00 00 00 02 00 ff ff 82 42 ${uint16ToHexString(
-        sceneAddress
-      )} 00`
-    );
-  }
+  public abstract recallScene(sceneAddress: number): void;
 
   /**
    * Node reset success event handler
