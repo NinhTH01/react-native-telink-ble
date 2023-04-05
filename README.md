@@ -8,9 +8,15 @@ Telink BLE module for React Native
 npm install react-native-telink-ble
 ```
 
-## Documentation
+## Usage
 
-Docs available at: [https://docs.thanhtunguet.info/react-native-telink-ble/](https://docs.thanhtunguet.info/react-native-telink-ble/)
+```js
+import { multiply } from 'react-native-telink-ble';
+
+// ...
+
+const result = await multiply(3, 7);
+```
 
 ## Contributing
 
