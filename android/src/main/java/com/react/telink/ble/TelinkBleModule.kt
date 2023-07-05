@@ -959,4 +959,9 @@ class TelinkBleModule(reactContext: ReactApplicationContext) :
       }
     }
   }
+
+  @ReactMethod
+  fun startMesh(id: String) {
+    app.initMeshNew(id)
+  }
 }

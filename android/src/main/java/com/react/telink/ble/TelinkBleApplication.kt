@@ -9,12 +9,16 @@ import com.react.telink.ble.model.NodeInfo
 import com.react.telink.ble.model.NodeStatusChangedEvent
 import com.telink.ble.mesh.core.message.NotificationMessage
 import com.telink.ble.mesh.foundation.MeshApplication
+import com.telink.ble.mesh.foundation.MeshService
 import com.telink.ble.mesh.foundation.event.MeshEvent
 import com.telink.ble.mesh.foundation.event.NetworkInfoUpdateEvent
 import com.telink.ble.mesh.foundation.event.OnlineStatusEvent
 import com.telink.ble.mesh.foundation.event.StatusNotificationEvent
+import com.telink.ble.mesh.foundation.parameter.AutoConnectParameters
 import com.telink.ble.mesh.util.FileSystem
 import com.telink.ble.mesh.util.MeshLogger
+import com.telink.ble.mesh.util.MeshLogger.log
+
 
 abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
   private var meshInfo: MeshInfo? = null
@@ -62,6 +66,27 @@ abstract class TelinkBleApplication : MeshApplication(), ReactApplication {
     MeshLogger.d("setup mesh info: " + meshInfo.toString())
     meshInfo = mesh
     dispatchEvent(MeshEvent(this, MeshEvent.EVENT_TYPE_MESH_RESET, "mesh reset"))
+  }
+
+  fun initMeshNew(index: String) {
+    MeshInfo.fileName = MeshInfo.FILE_NAME + index
+    val configObj = FileSystem.readAsObject(this, MeshInfo.fileName)
+    if (configObj == null) {
+      MeshService.getInstance().idle(true)
+      val meshInfo = MeshInfo.createNewMesh(this)
+      meshInfo.saveOrUpdate(this)
+      setupMesh(meshInfo)
+      MeshService.getInstance().setupMeshNetwork(meshInfo.convertToConfiguration())
+      log("Da tai mang moi")
+      MeshService.getInstance().autoConnect(AutoConnectParameters())
+    } else {
+      val meshInfo = configObj as MeshInfo
+      MeshService.getInstance().idle(true)
+      setupMesh(meshInfo)
+      MeshService.getInstance().setupMeshNetwork(meshInfo.convertToConfiguration())
+      log("Da tai mang moi")
+      MeshService.getInstance().autoConnect(AutoConnectParameters())
+    }
   }
 
   override fun onStatusNotificationEvent(statusNotificationEvent: StatusNotificationEvent?) {
